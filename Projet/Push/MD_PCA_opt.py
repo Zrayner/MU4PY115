@@ -47,7 +47,6 @@ Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
         'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001]),
         'layers_units': hp.choice('layers_units', [20,30,40,50]),
         'layers_number': hp.choice('layers_number', [2,3,4]),
-        'kernel_regularizer': hp.choice('kernel_regularizer', [None, 'l1', 'l2', 'l1_l2']),
         'kernel_initializer': hp.choice('kernel_initializer', [None, 'GlorotUniform']),
                 
     
@@ -203,7 +202,7 @@ def objective(space_params):
         
         model = Sequential()
         for i in range(params['layers_number']):
-            model.add(Dense(params['layers_units'], activation='tanh',kernel_regularizer=params['kernel_regularizer'],kernel_initializer=params['kernel_initializer']))
+            model.add(Dense(params['layers_units'], activation='tanh',kernel_initializer=params['kernel_initializer']))
         model.add(Dense(1,))
     #kernel_regularizer='l1_l2'
         
@@ -242,7 +241,7 @@ def objective(space_params):
     Zundel_NN = compile_model(zundel_model)
     
     batchsize = 32
-    epochs= 5
+    epochs= 100
     
     #callbacks
     lr_reduce = keras.callbacks.ReduceLROnPlateau(
@@ -265,7 +264,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=1)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=100)
 print (best)
 print (trials.best_trial)
 
