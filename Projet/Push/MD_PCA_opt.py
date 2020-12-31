@@ -5,12 +5,7 @@ Created on Thu Dec 31 04:06:55 2020
 @author: ewenf
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 29 17:02:51 2020
 
-@author: ewenf
-"""
 
 from __future__ import print_function
 import keras,sklearn
@@ -33,8 +28,7 @@ from dscribe.descriptors import SOAP
 from ase.build import molecule
 import pickle
 from ase import Atoms
-import hyperopt
-
+from hyperopt import hp, fmin, tpe, hp, STATUS_OK, Trials
 import math 
 
 
@@ -266,7 +260,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, space, algo=tpe.suggest, trials=trials, max_evals=100)
+best = fmin(objective, Dscribe_Space, algo=tpe.suggest, trials=trials, max_evals=100)
 print (best)
 print (trials.best_trial)
 
