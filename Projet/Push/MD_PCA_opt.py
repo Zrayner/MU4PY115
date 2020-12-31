@@ -242,7 +242,7 @@ def objective(space_params):
     Zundel_NN = compile_model(zundel_model)
     
     batchsize = 32
-    epochs= 20
+    epochs= 5
     
     #callbacks
     lr_reduce = keras.callbacks.ReduceLROnPlateau(
@@ -271,9 +271,9 @@ print (trials.best_trial)
 
 
 Best_Results_NN = [best,trials.best_trial] 
-file_best_NN = open('best_trials.obj', 'w') 
+file_best_NN = open('best_trials.obj', 'wb') 
 pickle.dump(Best_Results_NN, file_best_NN)
-file_NNTrials = open('NNTrials.obj', 'w') 
+file_NNTrials = open('NNTrials.obj', 'wb') 
 pickle.dump(trials, file_best_NN)
 
 
