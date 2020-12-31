@@ -27,7 +27,7 @@ from ase.build import molecule
 import pickle
 from ase import Atoms
 
-
+datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
 positions = pickle.load(open('zundel_100K_pos','rb'))[::10]
 energies = pickle.load(open('zundel_100K_energy','rb'))[::10]
