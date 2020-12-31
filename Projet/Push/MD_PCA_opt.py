@@ -149,7 +149,6 @@ def objective(space_params):
             
     
     pca_treshold = max(pca_treshold_hydrogens,pca_treshold_oxygens)
-    print(pca_treshold)
     
     
     for i_hydrogens in range(n_hydrogens):
@@ -243,7 +242,7 @@ def objective(space_params):
     Zundel_NN = compile_model(zundel_model)
     
     batchsize = 32
-    epochs= 100
+    epochs= 20
     
     #callbacks
     lr_reduce = keras.callbacks.ReduceLROnPlateau(
@@ -273,7 +272,7 @@ print (trials.best_trial)
 
 Best_Results_NN = [best,trials.best_trial] 
 file_best_NN = open('best_trials.obj', 'w') 
-pickle.dump(Best_Results, file_best_NN)
+pickle.dump(Best_Results_NN, file_best_NN)
 file_NNTrials = open('NNTrials.obj', 'w') 
 pickle.dump(trials, file_best_NN)
 
