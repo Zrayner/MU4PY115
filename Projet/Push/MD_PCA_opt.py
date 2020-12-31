@@ -266,13 +266,15 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=100)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=1)
 print (best)
 print (trials.best_trial)
 
 
 Best_Results_NN = [best,trials.best_trial] 
-file_best_NN = open('filename_best.obj', 'w') 
+file_best_NN = open('best_trials.obj', 'w') 
 pickle.dump(Best_Results, file_best_NN)
+file_NNTrials = open('NNTrials.obj', 'w') 
+pickle.dump(trials, file_best_NN)
 
 
