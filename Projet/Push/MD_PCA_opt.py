@@ -41,10 +41,15 @@ energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[:
 
 
 
-Dscribe_Space= {'nmax': hp.choice('nmax', [2,3, 4, 5,6,7]),
-                'lmax': hp.choice('lmax', [2,3, 4, 5,6,7]),
-                'rcut': hp.choice('rcut', [5.0,6.0,7.0, 8.0,9.0,10.0]),
-                'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,0.001,0.02,0.005]),
+Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
+        'lmax': hp.choice('lmax', [2,3, 4, 5]),
+        'rcut': hp.choice('rcut', [5.0,6.0,7.0, 8.0,9.0,10.0]),
+        'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001]),
+        'layers_units': hp.choice('layers_units', [20,30,40,50]),
+        'layers_number': hp.choice('layers_number', [2,3,4]),
+        'kernel_regularizer': hp.choice('kernel_regularizer', [None, 'l1', 'l2', 'l1_l2']),
+        'kernel_initializer': hp.choice('kernel_initializer', [None, 'GlorotUniform']),
+                
     
     
     
@@ -53,6 +58,7 @@ Dscribe_Space= {'nmax': hp.choice('nmax', [2,3, 4, 5,6,7]),
 
 def objective(space_params):
     
+    print ('Params testing: ', space_params)
     #parameters settings
     species = ["H","O"]
     sigma_SOAP = space_params['sigma_SOAP']
@@ -194,11 +200,11 @@ def objective(space_params):
     # tf.keras.regularizers.L1L2(
     #     l1=0.0001, l2=0.0001
     # )
-    def model():
+    def model(params):
         
         model = Sequential()
-        model.add(Dense(30, activation='tanh'))
-        model.add(Dense(30, activation='tanh'))
+        for i in range(params['layers_number']):
+            model.add(Dense(params['layers_units'], activation='tanh',kernel_regularizer=params['kernel_regularizer'],kernel_initializer=params['kernel_initializer']))
         model.add(Dense(1,))
     #kernel_regularizer='l1_l2'
         
@@ -206,8 +212,8 @@ def objective(space_params):
     
     
     
-    model0=model()
-    modelH=model()
+    model0=model(space_params)
+    modelH=model(space_params)
     
     inputs = []
     for i_atoms in range(n_atoms):
@@ -260,7 +266,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Dscribe_Space, algo=tpe.suggest, trials=trials, max_evals=100)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=100)
 print (best)
 print (trials.best_trial)
 
