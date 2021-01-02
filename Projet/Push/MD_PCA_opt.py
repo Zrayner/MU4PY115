@@ -40,10 +40,10 @@ energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1
 
 
 
-"""Tested_Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
+Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
         'lmax': hp.choice('lmax', [2,3, 4, 5]),
         'rcut': hp.choice('rcut', [5.0,6.0,7.0, 8.0,9.0,10.0]),
-        'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001,2,5,10,100]),
+        'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001]),
         'layers_units': hp.choice('layers_units', [20,30,40,50]),
         'layers_number': hp.choice('layers_number', [2,3,4]),
         'kernel_initializer': hp.choice('kernel_initializer', [None, 'GlorotUniform']),
@@ -52,7 +52,7 @@ energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1
     
     
     
-    }"""
+    }
 
 best_params_yet={'nmax': 3,
         'lmax': 4,
@@ -78,14 +78,7 @@ best_params_yet={'nmax': 3,
     } """
 
 
-Space= { 'rcut': hp.choice('rcut', [10.0,11.0,12.0,13.0]),
-        
-                
-    
-    
-    
-    
-    }
+
 
 def objective(space_params):
     
@@ -296,7 +289,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=1)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=150)
 print (best)
 print (trials.best_trial)
 
