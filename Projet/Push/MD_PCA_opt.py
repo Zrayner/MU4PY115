@@ -34,10 +34,11 @@ import math
 tot_time=99999
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
-all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))[::10]
-all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[::10]
-energies = all_energies[1:tot_time+1]
-positions = all_positions[:tot_time]
+all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
+all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
+
+energies = all_energies[1:tot_time+1][::10]
+positions = all_positions[:tot_time][::10]
 
 
 
@@ -297,7 +298,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=10)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=1)
 print (best)
 print (trials.best_trial)
 
