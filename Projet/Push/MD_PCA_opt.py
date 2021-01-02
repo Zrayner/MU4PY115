@@ -78,7 +78,7 @@ best_params_yet={'nmax': 3,
     } """
 
 
-Space= { 'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,0.5,1,0.001]),
+Space= { 'sigma_SOAP': hp.choice('sigma_SOAP', [1,2,5,10,100]),
         
                 
     
