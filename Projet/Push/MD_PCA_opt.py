@@ -59,7 +59,7 @@ best_params_yet={'nmax': 3,
         'lmax': 4,
         'rcut': 10.0,
         'sigma_SOAP': 1,
-        'layers_units': 30
+        'layers_units': 30,
         'layers_number': 2,
         'kernel_initializer': None,
        
