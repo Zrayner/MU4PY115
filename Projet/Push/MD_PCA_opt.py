@@ -208,7 +208,7 @@ def objective(space_params):
     
     #setting the train and test and validation set
     descriptors_train = descriptors_swap[:,:85000,:]
-    descriptors_val = descriptors_swap[:,85000:95000+1,:]
+    descriptors_val = descriptors_swap[:,85000:95000,:]
     descriptors_test = descriptors_swap[:,95000:,:]
     energies_train = scaled_energies[:85000]
     energies_val = scaled_energies[85000:95000]
