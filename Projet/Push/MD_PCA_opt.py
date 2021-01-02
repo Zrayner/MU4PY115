@@ -301,10 +301,10 @@ print (best)
 print (trials.best_trial)
 
 
-Best_Results_NN = [best,trials.best_trial] 
+"""Best_Results_NN = [best,trials.best_trial] 
 file_best_NN = open('best_trials.obj', 'wb') 
 pickle.dump(Best_Results_NN, file_best_NN)
 file_NNTrials = open('NNTrials.obj', 'wb') 
-pickle.dump(trials, file_best_NN)
+pickle.dump(trials, file_best_NN)"""
 
 
