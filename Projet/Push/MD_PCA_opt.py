@@ -37,8 +37,8 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
-energies = all_energies[1:tot_time+1][::10]
-positions = all_positions[:tot_time][::10]
+energies = all_energies[1:tot_time+1]
+positions = all_positions[:tot_time]
 
 
 
@@ -209,9 +209,9 @@ def objective(space_params):
     
     
     #setting the train and test and validation set
-    descriptors_train = descriptors_swap[:,:85000,:]
-    descriptors_val = descriptors_swap[:,85000:95000,:]
-    descriptors_test = descriptors_swap[:,95000:,:]
+    descriptors_train = descriptors_swap[:,:85000+1,:]
+    descriptors_val = descriptors_swap[:,85000+1:95000+1,:]
+    descriptors_test = descriptors_swap[:,95000+1:,:]
     energies_train = scaled_energies[:85000]
     energies_val = scaled_energies[85000:95000]
     energies_test = scaled_energies[95000:]
