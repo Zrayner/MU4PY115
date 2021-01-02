@@ -62,6 +62,7 @@ best_params_yet={'nmax': 3,
         'layers_units': 30,
         'layers_number': 2,
         'kernel_initializer': None,
+        'batch_size': 32
        
     
     }
@@ -78,7 +79,7 @@ best_params_yet={'nmax': 3,
     } """
 
 
-Space= { 'batch_size': hp.choice('batch_size', [16,32,64,100,200]),
+Space= { 'rcut': hp.choice('rcut', [10.0,11.0,12.0,13.0]),
         
                 
     
@@ -96,7 +97,7 @@ def objective(space_params):
     periodic = False
     nmax = best_params_yet['nmax']
     lmax = best_params_yet['lmax']
-    rcut = best_params_yet['rcut']
+    rcut = space_params['rcut']
     
     
     
@@ -272,7 +273,7 @@ def objective(space_params):
     
     Zundel_NN = compile_model(zundel_model)
     
-    batchsize = space_params['batch_size']
+    batchsize = 100
     epochs= 100
     
     #callbacks
@@ -296,7 +297,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=5)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=10)
 print (best)
 print (trials.best_trial)
 
