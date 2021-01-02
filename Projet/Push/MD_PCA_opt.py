@@ -41,13 +41,45 @@ energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[:
 
 
 
-Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
+Tested_Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
         'lmax': hp.choice('lmax', [2,3, 4, 5]),
         'rcut': hp.choice('rcut', [5.0,6.0,7.0, 8.0,9.0,10.0]),
         'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001]),
         'layers_units': hp.choice('layers_units', [20,30,40,50]),
         'layers_number': hp.choice('layers_number', [2,3,4]),
         'kernel_initializer': hp.choice('kernel_initializer', [None, 'GlorotUniform']),
+                
+    
+    
+    
+    
+    }
+
+best_params_yet={'nmax': 3,
+        'lmax': 4,
+        'rcut': 10.0,
+        'sigma_SOAP': 1,
+        'layers_units': 30
+        'layers_number': 2,
+        'kernel_initializer': None,
+       
+    
+    }
+
+
+"""To_test= { 'batch_size'
+                rcut >10
+                
+          
+                
+    
+ 
+    
+    } """"
+
+
+Space= { 'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001]),
+        
                 
     
     
@@ -62,9 +94,9 @@ def objective(space_params):
     species = ["H","O"]
     sigma_SOAP = space_params['sigma_SOAP']
     periodic = False
-    nmax = space_params['nmax']
-    lmax = space_params['lmax']
-    rcut = space_params['rcut']
+    nmax = best_params_yet['nmax']
+    lmax = best_params_yet['lmax']
+    rcut = best_params_yet['rcut']
     
     
     
@@ -160,8 +192,8 @@ def objective(space_params):
     scaled_pca_descriptors = np.empty(np.shape(scaled_descriptors[:,:,:pca_treshold]))
     
     
-    scaler_O_2 = [StandardScaler()]*2
-    scaler_H_2 = [StandardScaler()]*5
+    scaler_O_2 = [MaxAbsScaler()]*2
+    scaler_H_2 = [MaxAbsScaler()]*5
     
     for i_hydrogens in range(n_hydrogens):
         scaled_pca_descriptors[:,i_hydrogens+n_oxygens,:] = scaler_H_2[i_hydrogens].fit_transform(scaled_descriptors[:,i_hydrogens+n_oxygens,:pca_treshold])
@@ -210,8 +242,8 @@ def objective(space_params):
     
     
     
-    model0=model(space_params)
-    modelH=model(space_params)
+    model0=model(best_params_yet)
+    modelH=model(best_params_yet)
     
     inputs = []
     for i_atoms in range(n_atoms):
@@ -240,7 +272,7 @@ def objective(space_params):
     
     Zundel_NN = compile_model(zundel_model)
     
-    batchsize = 32
+    batchsize = 100
     epochs= 100
     
     #callbacks
