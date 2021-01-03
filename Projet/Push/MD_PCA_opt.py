@@ -289,7 +289,7 @@ def objective(space_params):
     return {'loss': last_loss, 'status': STATUS_OK }
     
 trials=Trials()
-best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=150)
+best = fmin(objective, Space, algo=tpe.suggest, trials=trials, max_evals=100)
 print (best)
 print (trials.best_trial)
 
