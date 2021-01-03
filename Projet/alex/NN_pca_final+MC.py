@@ -300,7 +300,7 @@ acceptation = []
 mc_positions = all_positions[:100,:,:]
 mc_energies = all_energies[:100]
 while t<100:
-    try_positions = mc_postions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
+    try_positions = mc_positions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
     
     diff_E = all_energies[t] - try_energy
