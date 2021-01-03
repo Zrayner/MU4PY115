@@ -269,29 +269,29 @@ print(alpha)
 
 
     
-    def get_energy(positions):
+def get_energy(positions):
+
+    zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=try_positions)
+    descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)
     
-        zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=try_positions)
-        descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)
-        
-        for i_hydrogens in range(n_hydrogens):
-            scaler_H_1[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:])
-            pca_hydrogens.transform(descriptors[i_hydrogens+n_oxygens,:])
-            scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,0].reshape(1,-1))
-            for j_dims in range(pca_treshold-1):
-                scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,j_dims+1].reshape(1,-1))
-        for i_oxygens in range(n_oxygens):
-            scaled_descriptors[i_oxygens,:]=scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:])
-            pca_oxygens.transform(scaled_descriptors[i_oxygens,:])
-            scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,0].reshape(1,-1))
-            for j_dims in range(pca_treshold-1):
-                scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,j_dims+1].reshape(1,-1))
-        
-        descriptors_nn =[]
-        for i_atom in range(n_atoms):
-            descriptors_nn.append(descriptors[i_atom,:])
+    for i_hydrogens in range(n_hydrogens):
+        scaler_H_1[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:])
+        pca_hydrogens.transform(descriptors[i_hydrogens+n_oxygens,:])
+        scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,0].reshape(1,-1))
+        for j_dims in range(pca_treshold-1):
+            scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,j_dims+1].reshape(1,-1))
+    for i_oxygens in range(n_oxygens):
+        scaled_descriptors[i_oxygens,:]=scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:])
+        pca_oxygens.transform(scaled_descriptors[i_oxygens,:])
+        scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,0].reshape(1,-1))
+        for j_dims in range(pca_treshold-1):
+            scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,j_dims+1].reshape(1,-1))
     
-        return energy = energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
+    descriptors_nn =[]
+    for i_atom in range(n_atoms):
+        descriptors_nn.append(descriptors[i_atom,:])
+
+    return energy = energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
     
 t = 0
 acceptation = []
