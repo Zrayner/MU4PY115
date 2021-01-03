@@ -148,12 +148,12 @@ descriptors_swap = np.swapaxes(scaled_pca_descriptors,0,1)
 
 
 #setting the train and test and validation set
-descriptors_train = descriptors_swap[:,:850000,:]
-descriptors_val = descriptors_swap[:,850000:950000,:]
-descriptors_test = descriptors_swap[:,950000:,:]
-energies_train = scaled_energies[:850000]
-energies_val = scaled_energies[850000:950000]
-energies_test = scaled_energies[950000:]
+descriptors_train = descriptors_swap[:,:85000,:]
+descriptors_val = descriptors_swap[:,85000:95000,:]
+descriptors_test = descriptors_swap[:,95000:,:]
+energies_train = scaled_energies[:85000]
+energies_val = scaled_energies[85000:95000]
+energies_test = scaled_energies[95000:]
 
 
 #creating a list of array to fit in the NN
