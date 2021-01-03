@@ -25,9 +25,11 @@ from ase import Atoms
 
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
-positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
-energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
+all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
+all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
+positions = all_positions[::10]
+energies = all_energies[1::10]
 
 #parameters settings
 species = ["H","O"]
@@ -48,7 +50,7 @@ soap = SOAP(
     sparse=False,
 )
 
-n_configs = np.shape(positions)[0]-1
+n_configs = np.shape(positions)[0]
 n_features = soap.get_number_of_features()
 n_dims = n_features
 n_elements = 2
@@ -263,7 +265,7 @@ beta =  k * T
 dist = np.empty([n_dims-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
-        dist[i_configs,j_pos] = np.absolute(positions[i_configs,2,j_pos]-positions[i_configs+1,2,j_pos])
+        dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
 delta = max(np.mean(delta,axis=0)) * 0.9
 print(alpha)
 
@@ -295,12 +297,12 @@ def get_energy(positions):
     
 t = 0
 acceptation = []
-mc_positions = positions[:100,:,:]
+mc_positions = all_positions[:100,:,:]
 while t<100:
     try_positions = mc_postions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
     
-    diff_E = energies[t] - try_energy
+    diff_E = all_energies[t] - try_energy
     if diff_E < 0 : 
          energy = try_energy
          mc_positions[t,:,:] = try_positions
