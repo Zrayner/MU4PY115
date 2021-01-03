@@ -28,8 +28,8 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
-positions = all_positions[::20]
-energies = all_energies[1::20]
+positions = all_positions[::10]
+energies = all_energies[1::10]
 
 #parameters settings
 species = ["H","O"]
