@@ -31,7 +31,7 @@ from ase import Atoms
 from hyperopt import hp, fmin, tpe, hp, STATUS_OK, Trials
 import math 
 
-tot_time=99999
+
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
 positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))[::10]
