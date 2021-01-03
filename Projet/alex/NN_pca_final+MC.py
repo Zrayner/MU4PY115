@@ -28,8 +28,8 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
-positions = all_positions[::10]
-energies = all_energies[1::10]
+positions = all_positions[::20]
+energies = all_energies[1::20]
 
 #parameters settings
 species = ["H","O"]
@@ -208,12 +208,12 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 50
+batchsize = 200
 epochs= 200
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
-    monitor='loss', factor=0.6, patience=2, verbose=0,
+    monitor='loss', factor=0.1, patience=2, verbose=0,
     mode='auto', min_delta=0.0001, cooldown=0, min_lr=1e-10
 )
 
@@ -266,8 +266,8 @@ dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = max(np.mean(delta,axis=0)) * 0.9
-print(alpha)
+delta = max(np.mean(dist,axis=0)) * 0.9
+print(delta)
 
 
     
@@ -298,18 +298,19 @@ def get_energy(positions):
 t = 0
 acceptation = []
 mc_positions = all_positions[:100,:,:]
+mc_energies = all_energies[:100]
 while t<100:
     try_positions = mc_postions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
     
     diff_E = all_energies[t] - try_energy
     if diff_E < 0 : 
-         energy = try_energy
+         mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
     elif np.exp(-beta * (diff_E)) >= np.random.random():
-         energy = try_energy
+         mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
@@ -319,6 +320,11 @@ while t<100:
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
+plt.clf()
+plt.plot(all_energies[:100],mc_energies,'.',marksize=2)
+plt.plot(all_energies[:100],all_energies[:100],marksize=2)
+plt.savefig('mc_energies.jpg')
+plt.clf()
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
