@@ -258,7 +258,7 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 
 T = 100
-k = 1,380 649e-23
+k = 1,380649e-23
 beta =  k * T
 dist = np.empty([n_dims-1,3])
 for i_configs in range(n_configs-1):
