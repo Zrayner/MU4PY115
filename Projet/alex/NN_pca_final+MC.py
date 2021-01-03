@@ -277,14 +277,14 @@ def get_energy(positions):
     descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)
     
     for i_hydrogens in range(n_hydrogens):
-        scaler_H_1[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
-        pca_hydrogens.transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
-        scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
+        scaler_H_1[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(-1,1))
+        pca_hydrogens.transform(descriptors[i_hydrogens+n_oxygens,:].reshape(-1,1))
+        scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(-1,1))
 
     for i_oxygens in range(n_oxygens):
-        scaled_descriptors[i_oxygens,:]=scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
-        pca_oxygens.transform(scaled_descriptors[i_oxygens,:].reshape(1,-1))
-        scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
+        scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:].reshape(-1,1))
+        pca_oxygens.transform(scaled_descriptors[i_oxygens,:].reshape(-1,1))
+        scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,:].reshape(-1,1))
    
     
     descriptors_nn =[]
