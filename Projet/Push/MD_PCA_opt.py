@@ -85,10 +85,10 @@ def objective(space_params):
     print ('Params testing: ', space_params)
     #parameters settings
     species = ["H","O"]
-    sigma_SOAP = best_params_yet['sigma_SOAP']
+    sigma_SOAP = space_params['sigma_SOAP']
     periodic = False
-    nmax = best_params_yet['nmax']
-    lmax = best_params_yet['lmax']
+    nmax = space_params['nmax']
+    lmax = space_params['lmax']
     rcut = space_params['rcut']
     
     
@@ -235,8 +235,8 @@ def objective(space_params):
     
     
     
-    model0=model(best_params_yet)
-    modelH=model(best_params_yet)
+    model0=model(space_params)
+    modelH=model(space_params)
     
     inputs = []
     for i_atoms in range(n_atoms):
@@ -294,10 +294,9 @@ print (best)
 print (trials.best_trial)
 
 
-"""Best_Results_NN = [best,trials.best_trial] 
+Best_Results_NN = [best,trials.best_trial] 
 file_best_NN = open('best_trials.obj', 'wb') 
 pickle.dump(Best_Results_NN, file_best_NN)
 file_NNTrials = open('NNTrials.obj', 'wb') 
-pickle.dump(trials, file_best_NN)"""
-
+pickle.dump(trials, file_best_NN)
 
