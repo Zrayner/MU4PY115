@@ -283,7 +283,7 @@ def get_energy(positions):
 
     for i_oxygens in range(n_oxygens):
         scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
-        pca_oxygens.transform(scaled_descriptors[i_oxygens,:].reshape(1,-1))
+        pca_oxygens.transform(descriptors[i_oxygens,:].reshape(1,-1))
         scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
    
     
