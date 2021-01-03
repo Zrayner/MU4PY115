@@ -279,15 +279,13 @@ def get_energy(positions):
     for i_hydrogens in range(n_hydrogens):
         scaler_H_1[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
         pca_hydrogens.transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
-        scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,0].reshape(-1,1))
-        for j_dims in range(pca_treshold-1):
-            scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,j_dims+1].reshape(-1,1))
+        scaler_H_2[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
+
     for i_oxygens in range(n_oxygens):
         scaled_descriptors[i_oxygens,:]=scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
         pca_oxygens.transform(scaled_descriptors[i_oxygens,:].reshape(1,-1))
-        scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,0].reshape(-1,1))
-        for j_dims in range(pca_treshold-1):
-            scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,j_dims+1].reshape(-1,1))
+        scaler_O_2[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
+   
     
     descriptors_nn =[]
     for i_atom in range(n_atoms):
