@@ -293,7 +293,7 @@ def get_energy(positions):
     for i_atom in range(n_atoms):
         descriptors_nn.append(descriptors[i_atom,:])
 
-    return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn).reshape(-1,1))
+    return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn).reshape(1,-1))
     
 t = 0
 acceptation = []
