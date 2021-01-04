@@ -300,7 +300,7 @@ while t<100:
     
     diff_E = mc_energies[t] - try_energy
     if diff_E < 0 : 
-         mc_energies[t] = try_energy[]
+         mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
