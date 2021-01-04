@@ -292,13 +292,15 @@ def get_energy(positions):
 t = 0
 acceptation = []
 mc_positions = all_positions[:100,:,:]
-mc_energies = all_energies[:100]
-for i_time in range(100):
+mc_energies = all_energies[1:101]
+try_energy_overtime=np.empty(100)
+try_positions_overtime=np.empty(100)
+for i_time in range(1,100):
     try_positions = np.empty([50,n_atoms,3])
     try_energy = np.empty(50)
        while t<50:
         try_positions[t] = mc_positions[i_time,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
-        try_energy[t] = get_energy(try_positions)
+        try_energy[t] = get_energy(try_positions[t])
     
         
         diff_E = mc_energies[i_time] - try_energy[t]
@@ -316,8 +318,8 @@ for i_time in range(100):
         else:
             acceptation.append(0)
             pass
-     mc_position[i_time+1] = mc_postions[np.argmin(mc_energies)]
-     mc_energy[i_time]=
+     try_positions_overtime[i_time] = try_positions[np.argmin(try_energy)]
+     try_energy_overtime[i_time]=try_energy[np.argmin(try_energy)]
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
