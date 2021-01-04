@@ -145,7 +145,7 @@ for j_dims in range(pca_treshold-1):
 
 
 #swaping axes for NN purpose
-descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,n_dims)[:,:,pca_treshold],0,1)
+descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,n_dims)[:,:,:pca_treshold],0,1)
 
 
 #setting the train and test and validation set
