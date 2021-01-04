@@ -296,7 +296,7 @@ mc_energies = all_energies[:100]
 while t<100:
     try_positions = mc_positions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
-
+    rnd = np.random.random()
     
     diff_E = mc_energies[t] - try_energy
     print(diff_E)
@@ -305,7 +305,7 @@ while t<100:
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
-    elif np.exp(-beta * diff_E[0]) >= np.random.random():
+    elif np.exp(-beta * diff_E) >= rnd:
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
