@@ -24,10 +24,13 @@ from ase.build import molecule
 from ase import Atoms
 
 
+datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
-positions = pickle.load(open('zundel_100K_pos','rb'))[::10]
-energies = pickle.load(open('zundel_100K_energy','rb'))[1::10]
+all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
+all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
+positions = all_positions[::10]
+energies = all_energies[1::10]
 
 #parameters settings
 species = ["H","O"]
