@@ -286,7 +286,7 @@ def get_energy(positions):
         desc[:,:] = descriptors[i_atom,:pca_treshold]
         descriptors_nn.append(np.int_(desc))
     
-    return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
+    return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))[0][0]
 
 
 t = 0
@@ -296,11 +296,11 @@ mc_energies = all_energies[:100]
 while t<100:
     try_positions = mc_positions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
-    print(try_energy)
+
     
-    diff_E = mc_energies[t] - try_energy[0]
+    diff_E = mc_energies[t] - try_energy
     if diff_E < 0 : 
-         mc_energies[t] = try_energy
+         mc_energies[t] = try_energy[]
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
