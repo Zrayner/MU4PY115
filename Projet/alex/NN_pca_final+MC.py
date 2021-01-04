@@ -293,26 +293,31 @@ t = 0
 acceptation = []
 mc_positions = all_positions[:100,:,:]
 mc_energies = all_energies[:100]
-while t<100:
-    try_positions = mc_positions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
-    try_energy = get_energy(try_positions)
-
+for i_time in range(100):
+    try_positions = np.empty([50,n_atoms,3])
+    try_energy = np.empty(50)
+       while t<50:
+        try_positions[t] = mc_positions[i_time,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
+        try_energy[t] = get_energy(try_positions)
     
-    diff_E = mc_energies[t] - try_energy
-    print("diff_E=",diff_E)
-    if diff_E < 0 : 
-         mc_energies[t] = try_energy
-         mc_positions[t+1,:,:] = try_positions
-         t = t + 1
-         acceptation.append(1)
-    elif np.exp(-beta * diff_E) >= np.random.random():
-         mc_energies[t] = try_energy
-         mc_positions[t+1,:,:] = try_positions
-         t = t + 1
-         acceptation.append(1)
-    else:
-        acceptation.append(0)
-        pass
+        
+        diff_E = mc_energies[i_time] - try_energy[t]
+        print("diff_E=",diff_E)
+        if diff_E < 0 : 
+             mc_energies[t] = try_energy[t]
+             mc_positions[t,:,:] = try_positions
+             t = t + 1
+             acceptation.append(1)
+        elif np.exp(-beta * diff_E) >= np.random.random():
+             mc_energies[t] = try_energy
+             mc_positions[t,:,:] = try_positions
+             t = t + 1
+             acceptation.append(1)
+        else:
+            acceptation.append(0)
+            pass
+     mc_position[i_time+1] = mc_postions[np.argmin(mc_energies)]
+     mc_energy[i_time]=
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
