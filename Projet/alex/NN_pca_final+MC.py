@@ -296,7 +296,7 @@ while t<100:
     try_positions = mc_positions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
     
-    diff_E = all_energies[t] - try_energy
+    diff_E = np.absolute(mc_energies[t] - try_energy)
     if diff_E < 0 : 
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
