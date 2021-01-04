@@ -40,7 +40,7 @@ energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1
 
 
 
-Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
+"""Tested_Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
         'lmax': hp.choice('lmax', [2,3, 4, 5]),
         'rcut': hp.choice('rcut', [5.0,6.0,7.0, 8.0,9.0,10.0]),
         'sigma_SOAP': hp.choice('sigma_SOAP', [0.01,0.1,1,0.001]),
@@ -52,16 +52,16 @@ Space= {'nmax': hp.choice('nmax', [2,3, 4, 5]),
     
     
     
-    }
+    }"""
 
-best_params_yet={'nmax': 3,
-        'lmax': 4,
+best_params_yet={'nmax': 4,
+        'lmax': 5,
         'rcut': 10.0,
         'sigma_SOAP': 1,
-        'layers_units': 30,
+        'layers_units': 50,
         'layers_number': 2,
         'kernel_initializer': None,
-        'batch_size': 32
+ 
        
     
     }
@@ -77,7 +77,15 @@ best_params_yet={'nmax': 3,
     
     } """
 
+Space= {'layers_units': hp.choice('layers_units', [20,30,40,50]),
+        'layers_number': 2,
 
+                
+    
+    
+    
+    
+    }
 
 
 def objective(space_params):
@@ -85,11 +93,11 @@ def objective(space_params):
     print ('Params testing: ', space_params)
     #parameters settings
     species = ["H","O"]
-    sigma_SOAP = space_params['sigma_SOAP']
+    sigma_SOAP = best_params_yet['sigma_SOAP']
     periodic = False
-    nmax = space_params['nmax']
-    lmax = space_params['lmax']
-    rcut = space_params['rcut']
+    nmax = best_params_yet['nmax']
+    lmax = best_params_yet['lmax']
+    rcut = best_params_yet['rcut']
     
     
     
