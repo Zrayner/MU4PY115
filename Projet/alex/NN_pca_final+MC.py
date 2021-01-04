@@ -299,25 +299,25 @@ for i_time in range(1,100):
     try_positions = np.empty([50,n_atoms,3])
     try_energy = np.empty(50)
     while t<50:
-    try_positions[t] = mc_positions[i_time,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
-    try_energy[t] = get_energy(try_positions[t])
+        try_positions[t] = mc_positions[i_time,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
+        try_energy[t] = get_energy(try_positions[t])
 
     
-    diff_E = mc_energies[i_time] - try_energy[t]
-    print("diff_E=",diff_E)
-    if diff_E < 0 : 
-         mc_energies[t] = try_energy[t]
-         mc_positions[t,:,:] = try_positions
-         t = t + 1
-         acceptation.append(1)
-    elif np.exp(-beta * diff_E) >= np.random.random():
-         mc_energies[t] = try_energy
-         mc_positions[t,:,:] = try_positions
-         t = t + 1
-         acceptation.append(1)
-    else:
-        acceptation.append(0)
-        pass
+        diff_E = mc_energies[i_time] - try_energy[t]
+        print("diff_E=",diff_E)
+        if diff_E < 0 : 
+            mc_energies[t] = try_energy[t]
+            mc_positions[t,:,:] = try_positions
+            t = t + 1
+            acceptation.append(1)
+        elif np.exp(-beta * diff_E) >= np.random.random():
+            mc_energies[t] = try_energy
+            mc_positions[t,:,:] = try_positions
+            t = t + 1
+            acceptation.append(1)
+        else:
+            acceptation.append(0)
+            pass
     try_positions_overtime[i_time] = try_positions[np.argmin(try_energy)]
     try_energy_overtime[i_time]=try_energy[np.argmin(try_energy)]
      
