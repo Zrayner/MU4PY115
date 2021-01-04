@@ -298,7 +298,7 @@ while t<100:
     try_energy = get_energy(try_positions)
     rnd = np.random.random()
     
-    diff_E = mc_energies[t] - try_energy
+    diff_E = np.float64(mc_energies[t] - try_energy)
     print(diff_E)
     if diff_E < 0 : 
          mc_energies[t] = try_energy
