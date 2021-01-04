@@ -262,7 +262,7 @@ for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
 delta = max(np.mean(dist,axis=0)) * 0.6
-print("delta="delta)
+print("delta=",delta)
 
 
     
@@ -299,7 +299,7 @@ while t<100:
     rnd = np.random.random()
     
     diff_E = np.float64(mc_energies[t] - try_energy)
-    print("diff_E="diff_E)
+    print("diff_E=",diff_E)
     if diff_E < 0 : 
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
