@@ -74,16 +74,19 @@ print('soap ok')
 #scaling inputs and outputs
 energies_scaler = StandardScaler().fit(energies.reshape((-1,1))) 
 scaled_energies = energies_scaler.transform(energies.reshape((-1,1)))
-scaled_descriptors = np.empty(np.shape(descriptors))
 
-scaler_O_1 = StandardScaler()
-scaler_H_1 = StandardScaler()
+
 
 n_features_oxygens = n_configs*n_oxygens
 n_features_hydrogens = n_configs*n_hydrogens
 
 
-scaled_descriptors[:n_features_oxygens,:] = scaler_H_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:])
+scaled_descriptors = np.empty([n_features_hydrogens+n_features_oxygens,n_dims])
+
+
+scaler_O_1 = StandardScaler()
+scaler_H_1 = StandardScaler()
+scaled_descriptors[n_features_oxygens:,:] = scaler_H_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:])
 scaled_descriptors[:n_features_oxygens,:] = scaler_O_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:])
 
 
