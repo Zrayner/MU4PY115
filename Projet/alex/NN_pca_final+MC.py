@@ -269,8 +269,7 @@ print(delta)
 def get_energy(positions):
 
     zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions)
-    descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)
-    print(np.shape(descriptors))     
+    descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)   
     descriptors[n_oxygens:,:] = scaler_H_1.transform(descriptors[n_oxygens:,:])
     for i_hydrogens in range(n_hydrogens):
         descriptors[n_oxygens+i_hydrogens,:] = pca_hydrogens.transform(descriptors[n_oxygens+i_hydrogens,:].reshape(1,-1))
@@ -281,11 +280,11 @@ def get_energy(positions):
         descriptors[i_oxygens,:] = pca_oxygens.transform(descriptors[i_oxygens,:].reshape(1,-1))
     descriptors[:n_oxygens,:pca_treshold] =scaler_O_2.transform(descriptors[:n_oxygens,:pca_treshold])
    
-    
+    desc = np.ones([1,pca_treshold])
     descriptors_nn =[]
-    
     for i_atom in range(n_atoms):
-        descriptors_nn.append(np.swapaxes([descriptors[i_atom,:pca_treshold]],0,1))
+        desc[:,:] = descriptors[i_atom,:pca_treshold]
+        descriptors_nn.append(np.int_(desc))
     
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
 
