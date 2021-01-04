@@ -76,13 +76,12 @@ energies_scaler = StandardScaler().fit(energies.reshape((-1,1)))
 scaled_energies = energies_scaler.transform(energies.reshape((-1,1)))
 scaled_descriptors = np.empty(np.shape(descriptors))
 
-scaler_O_1 = [StandardScaler()]*2
-scaler_H_1 = [StandardScaler()]*5
+scaler_O_1 = StandardScaler()
+scaler_H_1 = StandardScaler()
 
-for i_hydrogens in range(n_hydrogens):
-    scaled_descriptors[:,i_hydrogens+n_oxygens,:]=scaler_H_1[i_hydrogens].fit_transform(descriptors[:,i_hydrogens+n_oxygens,:])
-for i_oxygens in range(n_oxygens):
-    scaled_descriptors[:,i_oxygens,:]=scaler_O_1[i_oxygens].fit_transform(descriptors[:,i_oxygens,:])
+
+scaled_descriptors[:,n_oxygens:,:] = scaler_H_1.fit_transform(descriptors[:,n_oxygens:,:])
+scaled_descriptors[:,:n_oxygens,:] = scaler_O_1.fit_transform(descriptors[:,:n_oxygens,:])
 
 
 
@@ -121,26 +120,25 @@ print("dimension desc post pca=", pca_treshold, "\n"
 
 
 for i_hydrogens in range(n_hydrogens):
-    pca_hydrogens.transform(scaled_descriptors[:,i_hydrogens+n_oxygens,:])
+    scaled_descriptors[:,i_hydrogens+n_oxygens,:] = pca_hydrogens.transform(scaled_descriptors[:,i_hydrogens+n_oxygens,:])
 for i_oxygens in range(n_oxygens):
-    pca_oxygens.transform(scaled_descriptors[:,i_oxygens,:])
+    scaled_descriptors[:,i_oxygens,:] = pca_oxygens.transform(scaled_descriptors[:,i_oxygens,:])
     
 #scaling post pca
 scaled_pca_descriptors = np.empty(np.shape(scaled_descriptors[:,:,:pca_treshold]))
 
 
-scaler_O_2 = [MinMaxScaler()]*2
-scaler_H_2 = [MinMaxScaler()]*5
+scaler_O_2 = MinMaxScaler()
+scaler_H_2 = MinMaxScaler()
 
-for i_hydrogens in range(n_hydrogens):
-    scaled_pca_descriptors[:,i_hydrogens+n_oxygens,0] = scaler_H_2[i_hydrogens].fit_transform(scaled_descriptors[:,i_hydrogens+n_oxygens,0].reshape(1,-1))
-    for j_dims in range(pca_treshold-1):
-        scaled_pca_descriptors[:,i_hydrogens+n_oxygens,j_dims+1] = scaler_H_2[i_hydrogens].transform(scaled_descriptors[:,i_hydrogens+n_oxygens,j_dims+1].reshape(1,-1))
 
-for i_oxygens in range(n_oxygens):
-    scaled_pca_descriptors[:,i_oxygens,0] = scaler_O_2[i_oxygens].fit_transform(scaled_descriptors[:,i_oxygens,0].reshape(1,-1))
-    for j_dims in range(pca_treshold-1):
-        scaled_pca_descriptors[:,i_oxygens,j_dims+1] = scaler_O_2[i_oxygens].transform(scaled_descriptors[:,i_oxygens,j_dims+1].reshape(1,-1))
+scaled_pca_descriptors[:,n_oxygens:,0] = scaler_H_2.fit_transform(scaled_descriptors[:,n_oxygens:,0].reshape(1,-1))
+for j_dims in range(pca_treshold-1):
+    scaled_pca_descriptors[:,n_oxygens:,j_dims+1] = scaler_H_2.transform(scaled_descriptors[:,n_oxygens:,j_dims+1].reshape(1,-1))
+
+scaled_pca_descriptors[:,;n_oxygens,0] = scaler_O_2.fit_transform(scaled_descriptors[:,:n_oxygens,0].reshape(1,-1))
+for j_dims in range(pca_treshold-1):
+    scaled_pca_descriptors[:,:n_oxygens,j_dims+1] = scaler_O_2.transform(scaled_descriptors[:,:n_oxygens,j_dims+1].reshape(1,-1))
 
 
 #swaping axes for NN purpose
@@ -276,18 +274,22 @@ def get_energy(positions):
     zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions)
     descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)
     
+    
+    descriptors[n_oxygens:,:] = scaler_H_1.transform(descriptors[n_oxygens:,:].reshape(1,-1))
     for i_hydrogens in range(n_hydrogens):
-        scaler_H_1[i_hydrogens].transform(descriptors[i_hydrogens+n_oxygens,:].reshape(1,-1))
-        pca_hydrogens.transform(descriptors[i_hydrogens+n_oxygens,:].reshape(-1,1))
+        descriptors[n_oxygens+i_hydrogens,:] = pca_hydrogens.transform(descriptors[n_oxygens+i_hydrogens,:].reshape(1,-1))
+    descriptors[n_oxygens:,:pca_treshold] = scaler_H_2.transform(descriptors[n_oxygens:,:pca_treshold].reshape(1,-1))
 
+
+    descriptors[:n_oxygens,:] = scaler_O_1.transform(descriptors[:n_oxygens,:].reshape(1,-1))
     for i_oxygens in range(n_oxygens):
-        scaler_O_1[i_oxygens].transform(descriptors[i_oxygens,:].reshape(1,-1))
-        pca_oxygens.transform(descriptors[i_oxygens,:].reshape(-1,1))
+        descriptors[i_oxygens,:] = pca_oxygens.transform(descriptors[i_oxygens,:].reshape(1,-1))
+    descriptors[:n_oxygens,:pca_treshold] =scaler_O_2.transform(descriptors[:n_oxygens,:pca_treshold].reshape(1,-1))
    
     
     descriptors_nn =[]
     for i_atom in range(n_atoms):
-        descriptors_nn.append(descriptors[i_atom,:pca_treshold])
+        descriptors_nn.append(descriptors[i_atom,:])
 
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
     
