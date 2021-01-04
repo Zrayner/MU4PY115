@@ -276,7 +276,7 @@ def get_energy(positions):
 
     zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions)
     descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)
-            
+    print(np.shape(descriptors))     
     descriptors[n_oxygens:,:] = scaler_H_1.transform(descriptors[n_oxygens:,:].reshape(1,-1))
     for i_hydrogens in range(n_hydrogens):
         descriptors[n_oxygens+i_hydrogens,:] = pca_hydrogens.transform(descriptors[n_oxygens+i_hydrogens,:].reshape(1,-1))
