@@ -213,7 +213,7 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 100
+batchsize = 50
 epochs= 200
 
 #callbacks
