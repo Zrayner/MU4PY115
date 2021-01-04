@@ -79,6 +79,7 @@ best_params_yet={'nmax': 4,
 
 Space= {'layers_units': hp.choice('layers_units', [20,30,40,50]),
         'layers_number': 2,
+        'kernel_initializer': None,
 
                 
     
