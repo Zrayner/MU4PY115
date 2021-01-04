@@ -299,12 +299,13 @@ while t<100:
 
     
     diff_E = mc_energies[t] - try_energy
+    print(diff_E)
     if diff_E < 0 : 
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
-    elif np.exp(-beta * (diff_E)) >= np.random.random():
+    elif np.exp(-beta * diff_E[0]) >= np.random.random():
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
