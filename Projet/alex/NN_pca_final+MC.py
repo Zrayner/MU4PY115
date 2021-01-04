@@ -318,8 +318,8 @@ for i_time in range(1,100):
     else:
         acceptation.append(0)
         pass
-     try_positions_overtime[i_time] = try_positions[np.argmin(try_energy)]
-     try_energy_overtime[i_time]=try_energy[np.argmin(try_energy)]
+    try_positions_overtime[i_time] = try_positions[np.argmin(try_energy)]
+    try_energy_overtime[i_time]=try_energy[np.argmin(try_energy)]
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
