@@ -58,7 +58,7 @@ best_params_yet={'nmax': 4,
         'lmax': 5,
         'rcut': 10.0,
         'sigma_SOAP': 1,
-        'layers_units': 50,
+        'layers_units': 30,
         'layers_number': 2,
         'kernel_initializer': None,
  
@@ -77,9 +77,7 @@ best_params_yet={'nmax': 4,
     
     } """
 
-Space= {'layers_units': hp.choice('layers_units', [20,30,40,50]),
-        'layers_number': 2,
-        'kernel_initializer': None,
+Space= {'rcut': hp.choice('rcut', [10.0,11.0,12.0,13.0,14.0,15.0]),
 
                 
     
@@ -98,7 +96,7 @@ def objective(space_params):
     periodic = False
     nmax = best_params_yet['nmax']
     lmax = best_params_yet['lmax']
-    rcut = best_params_yet['rcut']
+    rcut = space_params['rcut']
     
     
     
@@ -244,8 +242,8 @@ def objective(space_params):
     
     
     
-    model0=model(space_params)
-    modelH=model(space_params)
+    model0=model(best_params_yet)
+    modelH=model(best_params_yet)
     
     inputs = []
     for i_atoms in range(n_atoms):
