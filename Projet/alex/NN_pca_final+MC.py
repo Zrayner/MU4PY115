@@ -136,7 +136,7 @@ scaled_pca_descriptors[:,n_oxygens:,0] = scaler_H_2.fit_transform(scaled_descrip
 for j_dims in range(pca_treshold-1):
     scaled_pca_descriptors[:,n_oxygens:,j_dims+1] = scaler_H_2.transform(scaled_descriptors[:,n_oxygens:,j_dims+1].reshape(1,-1))
 
-scaled_pca_descriptors[:,;n_oxygens,0] = scaler_O_2.fit_transform(scaled_descriptors[:,:n_oxygens,0].reshape(1,-1))
+scaled_pca_descriptors[:,:n_oxygens,0] = scaler_O_2.fit_transform(scaled_descriptors[:,:n_oxygens,0].reshape(1,-1))
 for j_dims in range(pca_treshold-1):
     scaled_pca_descriptors[:,:n_oxygens,j_dims+1] = scaler_O_2.transform(scaled_descriptors[:,:n_oxygens,j_dims+1].reshape(1,-1))
 
