@@ -256,12 +256,12 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 T = 100
 k = 1,380649e-23
-beta =  k * T
+beta = 1/ (k * T)
 dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = max(np.mean(dist,axis=0)) * 0.9
+delta = max(np.mean(dist,axis=0)) * 0.6
 print(delta)
 
 
@@ -305,7 +305,7 @@ while t<100:
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
-    elif np.exp(-beta * diff_E) >= rnd:
+    elif np.exp(-beta * diff_E[0]) >= rnd:
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
