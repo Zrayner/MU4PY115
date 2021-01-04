@@ -256,13 +256,13 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 T = 100
 k = 1,380649e-23
-beta = 1/ (k * T)
+beta = 1/(k*T)
 dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
 delta = max(np.mean(dist,axis=0)) * 0.6
-print(delta)
+print("delta="delta)
 
 
     
@@ -299,7 +299,7 @@ while t<100:
     rnd = np.random.random()
     
     diff_E = np.float64(mc_energies[t] - try_energy)
-    print(diff_E)
+    print("diff_E="diff_E)
     if diff_E < 0 : 
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
@@ -316,11 +316,6 @@ while t<100:
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
-plt.clf()
-plt.plot(all_energies[:100],mc_energies,'.',marksize=2)
-plt.plot(all_energies[:100],all_energies[:100],marksize=2)
-plt.savefig('mc_energies.jpg')
-plt.clf()
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -360,8 +355,11 @@ ax.set_ylabel('Y Label')
 ax.set_zlabel('Z Label')
 plt.savefig('DFT.jpg')
 
-
-         
+plt.clf()
+plt.plot(all_energies[:100],mc_energies,'.',marksize=2)
+plt.plot(all_energies[:100],all_energies[:100],marksize=2)
+plt.savefig('mc_energies.jpg')
+plt.clf()
 
         
 
