@@ -288,7 +288,8 @@ def get_energy(positions):
         descriptors_nn.append(np.swapaxes([descriptors[i_atom,:pca_treshold]],0,1)
     
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
-    
+
+
 t = 0
 acceptation = []
 mc_positions = all_positions[:100,:,:]
