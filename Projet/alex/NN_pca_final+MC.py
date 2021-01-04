@@ -135,14 +135,8 @@ for i_oxygens in range(n_oxygens):
 scaler_O_2 = MinMaxScaler()
 scaler_H_2 = MinMaxScaler()
 
-scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,0] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,0].reshape(1,-1))
-for j_dims in range(pca_treshold-1):
-    scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,j_dims+1] = scaler_H_2.transform(scaled_descriptors[n_features_oxygens:,j_dims+1].reshape(1,-1))
-
-scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,0] = scaler_O_2.fit_transform(scaled_descriptors[:n_features_oxygens,0].reshape(1,-1))
-for j_dims in range(pca_treshold-1):
-    scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,j_dims+1] = scaler_O_2.transform(scaled_descriptors[:n_features_oxygens,j_dims+1].reshape(1,-1))
-
+scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
+scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
 
 #swaping axes for NN purpose
 descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,n_dims)[:,:,:pca_treshold],0,1)
