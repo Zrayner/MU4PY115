@@ -255,8 +255,8 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 
 T = 100
-k = 1,380649e-23
-beta = 1/(k*T)
+k = 1.380649e-23
+beta = 1/(T*k)
 dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
@@ -296,16 +296,16 @@ mc_energies = all_energies[:100]
 while t<100:
     try_positions = mc_positions[t,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
     try_energy = get_energy(try_positions)
-    rnd = np.random.random()
+
     
-    diff_E = np.float64(mc_energies[t] - try_energy)
+    diff_E = mc_energies[t] - try_energy
     print("diff_E=",diff_E)
     if diff_E < 0 : 
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
          acceptation.append(1)
-    elif np.exp(-beta * diff_E[0]) >= rnd:
+    elif np.exp(-beta * diff_E) >= np.random.random():
          mc_energies[t] = try_energy
          mc_positions[t,:,:] = try_positions
          t = t + 1
