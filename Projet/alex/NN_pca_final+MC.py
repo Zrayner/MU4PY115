@@ -283,10 +283,8 @@ def get_energy(positions):
    
     
     descriptors_nn =[]
-    descriptor_reshape = np.empty(1)
-    descriptor_reshape[0] = descriptors[:,:pca_treshold]
     for i_atom in range(n_atoms):
-        descriptors_nn.append(np.swapaxes(descriptor_reshape,0,1))
+        descriptors_nn.append(np.swapaxes([descriptor_reshape],0,1))
 
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))
     
