@@ -100,7 +100,7 @@ var_ratio_pca_hydrogens = np.empty(n_features_hydrogens)
 pca_oxygens = PCA(n_dims)
 pca_hydrogens = PCA(n_dims)
 pca_oxygens.fit(scaled_descriptors[:n_features_oxygens,:])
-pca_hydrogens.fit(scaled_descriptors_pca[n_features_oxygens:,:])
+pca_hydrogens.fit(scaled_descriptors[n_features_oxygens:,:])
 var_ratio_pca_hydrogens = pca_hydrogens.explained_variance_ratio_
 var_ratio_pca_oxygens = pca_oxygens.explained_variance_ratio_
 
