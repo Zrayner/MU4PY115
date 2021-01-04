@@ -33,8 +33,8 @@ energies = pickle.load(open('zundel_100K_energy','rb'))[1::10]
 species = ["H","O"]
 sigma_SOAP = 0.7
 periodic = False
-nmax = 3
-lmax = 4
+nmax = 4
+lmax = 5
 rcut = 11.0
 
 #soap settings
@@ -172,8 +172,8 @@ for i_atom in range(n_atoms):
 def model():
     
     model = Sequential()
-    model.add(Dense(30, activation='tanh'))
-    model.add(Dense(30, activation='tanh'))
+    model.add(Dense(50, activation='tanh'))
+    model.add(Dense(50, activation='tanh'))
     model.add(Dense(1,))
 #kernel_regularizer='l1_l2'
     
