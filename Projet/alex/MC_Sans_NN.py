@@ -223,6 +223,7 @@ for i_time in range(1,100):
         try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire - delta  
         print(np.shape(try_position))
         try_energy = get_energy(try_position)
+        print('try_energy',try_energy)
 
     
         diff_E = mc_energies[i_time] - try_energy
