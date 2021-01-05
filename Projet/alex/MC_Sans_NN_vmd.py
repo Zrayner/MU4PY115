@@ -178,7 +178,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.8 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.1 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
@@ -186,6 +186,7 @@ mc_time = 10
 mc_iterations = 50
 acceptation = []
 e = 1.602176e-19
+
 
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
@@ -203,7 +204,7 @@ for i_time in range(1,mc_time):
         try_energy = get_energy(try_position)
 
     
-        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * e
+        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * e * 27.211396641308 #1 hartree = 27,211396641308eV
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
@@ -222,7 +223,7 @@ for i_time in range(1,mc_time):
     print("mc_time=",i_time)
     
  
-print("taux d'acceptation=",np.mean(acceptation),acceptation)  
+print("taux d'acceptation=",np.mean(acceptation))  
 
 zundel_MC = np.empty(mc_time,dtype=object )
 zundel_DFT = np.empty(mc_time,dtype=object )
@@ -237,8 +238,8 @@ for i_time_mc in range(mc_time):
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
 
-distance00_MC = measure.bond(zundel_MC[0],zundel_MC[1],iread("trajectoire_MC.xyz"))
-distance00_DFT = measure.bond(zundel_DFT[0,:],iread("trajectoire_DFT.xyz"))
+distance00_MC = measure.bond(0,1,iread("trajectoire_MC.xyz"))
+distance00_DFT = measure.bond(0,1,iread("trajectoire_DFT.xyz"))
 
 plt.clf()
 plt.hist(distance00_MC,color="red",alpha=0.5)
