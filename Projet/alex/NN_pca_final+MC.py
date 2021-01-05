@@ -292,37 +292,39 @@ def get_energy(positions):
 t = 0
 acceptation = []
 mc_positions = all_positions[:100,:,:]
-mc_energies = all_energies[1:101]
-try_energy_overtime=np.empty(100)
-try_positions_overtime=np.empty(100)
+mc_energies = all_energies[1:100+1]
+guess_energy_overtime=np.empty(100)
+guess_positions_overtime=np.empty(100)
+guess_positions_overtime[0] = mc_positions[0,:,:]
 for i_time in range(1,100):
-    try_positions = np.empty([50,n_atoms,3])
-    try_positions[t] = mc_positions[0,:,:]
-    try_energy = np.empty(50)
-    while t<50:
-        increment_aleatoire=np.random.random((n_atoms,3))*2*delta
-        print(increment_aleatoire)
-        try_positions[t] = mc_positions[i_time,:,:] + increment_aleatoire - delta  
-        try_energy[t] = get_energy(try_positions[t])
+    accepted_try_positions = np.empty([50,n_atoms,3])
+    accepted_try_energys = np.empty(50)
 
     
-        diff_E = mc_energies[i_time] - try_energy[t]
+    while t<50:
+        increment_aleatoire=np.random.random((n_atoms,3))*2*delta
+        print("increment aleatoire",increment_aleatoire)
+        try_position = try_positions_overtime[i_time-1,:,:] + increment_aleatoire - delta  
+        try_energy = get_energy(try_position)
+
+    
+        diff_E = mc_energies[i_time] - try_energy
         print("diff_E=",diff_E)
         if diff_E < 0 : 
-            mc_energies[t] = try_energy[t]
-            mc_positions[t,:,:] = try_positions[t]
+            accepted_try_energys[t] = try_energy
+            accepted_try_positions[t,:,:] = try_position
             t = t + 1
             acceptation.append(1)
         elif np.exp(-beta * diff_E) >= np.random.random():
-            mc_energies[t] = try_energy
-            mc_positions[t,:,:] = try_positions
+            accepted_try_energy[t] = try_energy
+            accepteded_try_positions[t,:,:] = try_position
             t = t + 1
             acceptation.append(1)
         else:
             acceptation.append(0)
             pass
-    try_positions_overtime[i_time] = try_positions[np.argmin(try_energy)]
-    try_energy_overtime[i_time]=try_energy[np.argmin(try_energy)]
+    try_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energy)]
+    try_energy_overtime[i_time]=accepted_try_energy[np.argmin(accepted_try_energy)]
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
