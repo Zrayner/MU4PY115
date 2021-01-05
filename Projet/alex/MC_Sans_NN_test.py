@@ -174,7 +174,7 @@ dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = np.mean(np.mean(dist,axis=0)) * 0.5
+delta = np.mean(np.mean(dist,axis=0)) * 2
 print("delta=",delta)
 
 
