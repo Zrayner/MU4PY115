@@ -226,7 +226,7 @@ history = Zundel_NN.fit(descriptors_train_nn,energies_train,
 
 
 
-keras.save_model(Zundel_NN)
+Zundel_NN.save('Fitted_Zundel_NN.h5')
 
 #descaling energies and outputs
 predicted_energies = Zundel_NN.predict(descriptors_test_nn)
