@@ -241,9 +241,12 @@ Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 #descaling energies and outputs
 predicted_energies = Zundel_NN.predict(descriptors_test_nn)
 descaled_energies = energies_scaler.inverse_transform(scaled_energies)
+print(np.shape(descaled_energies))
+
 descaled_predicted_energies = energies_scaler.inverse_transform(predicted_energies)
+print(np.shape(descaled_predicted_energies))
 energy = np.linspace(0,0.008,200)
-print("max error=",max(np.absolute(descaled_energies[95000*2:]-descaled_predicted_energies[95000*2:])))
+print("max error=",max(np.absolute(descaled_energies[95000*2:]-descaled_predicted_energies)))
 plt.figure(figsize=[10, 5])
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
