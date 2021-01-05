@@ -178,7 +178,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.9 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.6 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
@@ -219,8 +219,9 @@ for i_time in range(1,mc_time):
             acceptation.append(0)
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
-    i_time = i_time + 1
     print("mc_time=",i_time)
+    i_time = i_time + 1
+
     
  
 print("taux d'acceptation=",np.mean(acceptation))  
@@ -237,7 +238,7 @@ for i_time_mc in range(mc_time):
 
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
-
+print(iread("trajectoire_MC.xyz"))
 distance00_MC = measure.bond(0,1,iread("trajectoire_MC.xyz"))
 distance00_DFT = measure.bond(0,1,iread("trajectoire_DFT.xyz"))
 
