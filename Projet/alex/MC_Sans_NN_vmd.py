@@ -178,7 +178,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.05 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.1 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
@@ -204,7 +204,7 @@ for i_time in range(1,mc_time):
         try_energy = get_energy(try_position)
 
     
-        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * hartree  #1 hartree = 27,211396641308eV
+        diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree  #1 hartree = 27,211396641308eV
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
