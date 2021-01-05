@@ -205,7 +205,7 @@ print("delta=",delta_theorique)
 
 
 
-for delta in [0.36,0.37,0.38,0.39,0.4]:
+for delta in [0.38,0.382,0.384,0.386,0.388,0.39]:
     liste_acceptation=[]
     print("Delta",delta)
     for i in range(20):
