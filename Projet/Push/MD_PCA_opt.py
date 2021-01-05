@@ -56,7 +56,7 @@ energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1
 
 best_params_yet={'nmax': 4,
         'lmax': 5,
-        'rcut': 10.0,
+        'rcut': 11.0,
         'sigma_SOAP': 1,
         'layers_units': 30,
         'layers_number': 2,
@@ -77,7 +77,7 @@ best_params_yet={'nmax': 4,
     
     } """
 
-Space= {'rcut': hp.choice('rcut', [10.0,11.0,12.0,13.0,14.0,15.0]),
+Space= {'Scaler_2': hp.choice('Scaler_2', [StandardScaler, MaxAbsScaler, MinMaxScaler]),
 
                 
     
@@ -96,12 +96,9 @@ def objective(space_params):
     periodic = False
     nmax = best_params_yet['nmax']
     lmax = best_params_yet['lmax']
-    rcut = space_params['rcut']
+    rcut = best_params_yet['rcut']
     
-    
-    
-    
-    
+ 
     
     #soap settings
     soap = SOAP(
@@ -133,35 +130,38 @@ def objective(space_params):
     descriptors=np.empty([n_configs,n_atoms,n_features])
     for i_configs in range(n_configs):
         descriptors[i_configs,:,:] = soap.create(zundels[i_configs],positions=np.arange(n_atoms),n_jobs=4)
-    
+    print('soap ok')
     
     #scaling inputs and outputs
     energies_scaler = StandardScaler().fit(energies.reshape((-1,1))) 
     scaled_energies = energies_scaler.transform(energies.reshape((-1,1)))
-    scaled_descriptors = np.empty(np.shape(descriptors))
     
-    scaler_O_1 = [StandardScaler()]*2
-    scaler_H_1 = [StandardScaler()]*5
     
-    for i_hydrogens in range(n_hydrogens):
-        scaled_descriptors[:,i_hydrogens+n_oxygens,:]=scaler_H_1[i_hydrogens].fit_transform(descriptors[:,i_hydrogens+n_oxygens,:])
-    for i_oxygens in range(n_oxygens):
-        scaled_descriptors[:,i_oxygens,:]=scaler_O_1[i_oxygens].fit_transform(descriptors[:,i_oxygens,:])
+    
+    n_features_oxygens = n_configs*n_oxygens
+    n_features_hydrogens = n_configs*n_hydrogens
+    
+    
+    scaled_descriptors = np.empty([n_features_hydrogens+n_features_oxygens,n_dims])
+    
+    
+    scaler_O_1 = StandardScaler()
+    scaler_H_1 = StandardScaler()
+    scaled_descriptors[n_features_oxygens:,:] = scaler_H_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:])
+    scaled_descriptors[:n_features_oxygens,:] = scaler_O_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:])
     
     
     
     #PCA
-    n_features_oxygens = n_configs*n_oxygens
-    n_features_hydrogens = n_configs*n_hydrogens
-    descriptors_pca = np.reshape(scaled_descriptors,(n_features_hydrogens+n_features_oxygens,n_dims))
+    
     
     var_ratio_pca_oxygens = np.empty(n_features_oxygens)
     var_ratio_pca_hydrogens = np.empty(n_features_hydrogens)   
     
     pca_oxygens = PCA(n_dims)
     pca_hydrogens = PCA(n_dims)
-    pca_oxygens.fit(descriptors_pca[:n_features_oxygens,:])
-    pca_hydrogens.fit(descriptors_pca[n_features_oxygens:,:])
+    pca_oxygens.fit(scaled_descriptors[:n_features_oxygens,:])
+    pca_hydrogens.fit(scaled_descriptors[n_features_oxygens:,:])
     var_ratio_pca_hydrogens = pca_hydrogens.explained_variance_ratio_
     var_ratio_pca_oxygens = pca_oxygens.explained_variance_ratio_
     
@@ -170,49 +170,46 @@ def objective(space_params):
     pca_treshold_hydrogens = 0
     pca_treshold_oxygens = 0
     
-    while var_ratio_hydrogens<0.9999:
+    while var_ratio_hydrogens<0.999999:
         var_ratio_hydrogens +=  var_ratio_pca_hydrogens[pca_treshold_hydrogens]
         pca_treshold_hydrogens += 1
         
-    while var_ratio_oxygens<0.9999:
+    while var_ratio_oxygens<0.999999:
         var_ratio_oxygens += var_ratio_pca_oxygens[pca_treshold_oxygens]
         pca_treshold_oxygens += 1
             
     
     pca_treshold = max(pca_treshold_hydrogens,pca_treshold_oxygens)
+    print("dimension desc post pca=", pca_treshold, "\n"
+          "dimennsion desc pre pca=",n_dims)
     
-    
+    scaled_pca_descriptors = np.empty([n_configs,n_atoms,n_dims])
     for i_hydrogens in range(n_hydrogens):
-        pca_hydrogens.transform(scaled_descriptors[:,i_hydrogens+n_oxygens,:])
+        scaled_pca_descriptors[:,i_hydrogens+n_oxygens,:] = pca_hydrogens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_hydrogens+n_oxygens,:])
     for i_oxygens in range(n_oxygens):
-        pca_oxygens.transform(scaled_descriptors[:,i_oxygens,:])
+        scaled_pca_descriptors[:,i_oxygens,:] = pca_oxygens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_oxygens,:])
         
-    
-    
-    scaled_pca_descriptors = np.empty(np.shape(scaled_descriptors[:,:,:pca_treshold]))
-    
-    
-    scaler_O_2 = [MaxAbsScaler()]*2
-    scaler_H_2 = [MaxAbsScaler()]*5
-    
-    for i_hydrogens in range(n_hydrogens):
-        scaled_pca_descriptors[:,i_hydrogens+n_oxygens,:] = scaler_H_2[i_hydrogens].fit_transform(scaled_descriptors[:,i_hydrogens+n_oxygens,:pca_treshold])
-    
-    for i_oxygens in range(n_oxygens):
-        scaled_pca_descriptors[:,i_oxygens,:] = scaler_O_2[i_oxygens].fit_transform(scaled_descriptors[:,i_oxygens,:pca_treshold])
+    #scaling post pca
     
     
     
-    descriptors_swap = np.swapaxes(scaled_pca_descriptors,0,1)
+    scaler_O_2 = space_params['Scaler_2']
+    scaler_H_2 = space_params['Scaler_2']
+    
+    scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
+    scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
+    
+    #swaping axes for NN purpose
+    descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,n_dims)[:,:,:pca_treshold],0,1)
     
     
     #setting the train and test and validation set
-    descriptors_train = descriptors_swap[:,:85000,:]
-    descriptors_val = descriptors_swap[:,85000:95000,:]
-    descriptors_test = descriptors_swap[:,95000:,:]
-    energies_train = scaled_energies[:85000]
-    energies_val = scaled_energies[85000:95000]
-    energies_test = scaled_energies[95000:]
+    descriptors_train = descriptors_swap[:,:85000*2,:]
+    descriptors_val = descriptors_swap[:,85000*2:95000*2,:]
+    descriptors_test = descriptors_swap[:,95000*2:,:]
+    energies_train = scaled_energies[:85000*2]
+    energies_val = scaled_energies[85000*2:95000*2]
+    energies_test = scaled_energies[95000*2:]
     
     
     #creating a list of array to fit in the NN
@@ -226,24 +223,21 @@ def objective(space_params):
     
     
     
-    # creating the model
-    # tf.keras.regularizers.L1L2(
-    #     l1=0.0001, l2=0.0001
-    # )
+    
     def model(params):
-        
+            
         model = Sequential()
         for i in range(params['layers_number']):
             model.add(Dense(params['layers_units'], activation='tanh',kernel_initializer=params['kernel_initializer']))
         model.add(Dense(1,))
-    #kernel_regularizer='l1_l2'
-        
+      
+            
         return model
     
     
     
-    model0=model(best_params_yet)
-    modelH=model(best_params_yet)
+    model0 = model(best_params_yet)
+    modelH = model(best_params_yet)
     
     inputs = []
     for i_atoms in range(n_atoms):
@@ -263,34 +257,35 @@ def objective(space_params):
     
     def compile_model(model):
         
-        model.compile(loss=keras.losses.mean_squared_error,
-                      optimizer=keras.optimizers.Adam(),
-                      metrics=['MeanSquaredError'])
+        model.compile(loss=keras.losses.mse,
+                      optimizer=keras.optimizers.Adam())
         return model
     
     
     
     Zundel_NN = compile_model(zundel_model)
     
-    batchsize = 100
-    epochs= 100
+    batchsize = 200
+    epochs= 1000
     
     #callbacks
     lr_reduce = keras.callbacks.ReduceLROnPlateau(
-        monitor='loss', factor=0.1, patience=2, verbose=0,
+        monitor='loss', factor=0.1, patience=4, verbose=0,
         mode='auto', min_delta=0.0001, cooldown=0, min_lr=1e-10
     )
     
     
-    early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=4)
+    early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=10)
     
     #training the NN
     history = Zundel_NN.fit(descriptors_train_nn,energies_train,
                                           batch_size=batchsize,
                                           epochs=epochs,
-                                          verbose=2,
+                                          verbose=1,
                                           callbacks=[early_stopping,lr_reduce],
                                           validation_data=(descriptors_val_nn,energies_val))
+    
+
     
     last_loss=history.history['val_loss'][-1]
     return {'loss': last_loss, 'status': STATUS_OK }
@@ -301,9 +296,4 @@ print (best)
 print (trials.best_trial)
 
 
-Best_Results_NN = [best,trials.best_trial] 
-file_best_NN = open('best_trials.obj', 'wb') 
-pickle.dump(Best_Results_NN, file_best_NN)
-file_NNTrials = open('NNTrials.obj', 'wb') 
-pickle.dump(trials, file_best_NN)
 
