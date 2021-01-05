@@ -178,14 +178,14 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.6 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.05 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
 mc_time = 10
 mc_iterations = 50
 acceptation = []
-e = 1.602176e-19
+hartree = 1.602176*27.211297e-19
 
 
 guess_energy_overtime = np.empty(mc_time)
@@ -204,7 +204,7 @@ for i_time in range(1,mc_time):
         try_energy = get_energy(try_position)
 
     
-        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * e  #1 hartree = 27,211396641308eV
+        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * hartree  #1 hartree = 27,211396641308eV
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
@@ -219,9 +219,9 @@ for i_time in range(1,mc_time):
         else:
             acceptation.append(0)
             print(0)
-            pass
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
+    i_time = i_time + 1
     print("mc_time=",i_time)
     
  
@@ -240,8 +240,8 @@ for i_time_mc in range(mc_time):
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
 
-distance00_MC = measure.bond(0,1,iread("trajectoire_MC.xyz"))
-distance00_DFT = measure.bond(0,1,iread("trajectoire_DFT.xyz"))
+distance00_MC = measure.bond(0,1,iread("trajectoire_MC.xyz")[0],iread("trajectoire_MC.xyz")[mc_time-1])
+distance00_DFT = measure.bond(0,1,iread("trajectoire_DFT.xyz")[0],iread("trajectoire_DFT.xyz")[mc_time-1])
 
 plt.clf()
 plt.hist(distance00_MC,color="red",alpha=0.5)
