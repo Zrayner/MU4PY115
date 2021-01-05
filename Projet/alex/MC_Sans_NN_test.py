@@ -172,11 +172,12 @@ k = 1.380649e-23
 beta = 1/(T*k)
 
 
-dist = np.empty([n_configs-1,3])
+dist = np.empty([n_configs-1,n_atoms,3])
 for i_configs in range(n_configs-1):
-    for j_pos in range(3):
-        dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = (max(np.max(dist,axis=0)) - min(np.min(dist,axis=0))) * 0.4
+    for i_atom in range(n_atoms):
+        for j_pos in range(3):
+            dist[i_configs,n_atoms,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0)),axis=1)) * 0.8
 print("delta=",delta)
 
 
@@ -218,6 +219,7 @@ for i_time in range(1,mc_time):
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
     print('ok')
+    
  
 print("taux d'acceptation=",np.mean(acceptation))   
 print(guess_positions_overtime[:,0,0])
