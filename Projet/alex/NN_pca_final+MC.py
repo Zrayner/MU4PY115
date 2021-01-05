@@ -141,8 +141,8 @@ for i_oxygens in range(n_oxygens):
 
 
 
-scaler_O_2 = MaxAbsScaler()
-scaler_H_2 = MaxAbsScaler()
+scaler_O_2 = StandardScaler()
+scaler_H_2 = StandardScaler()
 
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
@@ -219,11 +219,11 @@ epochs= 100
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
     monitor='loss', factor=0.5, patience=4, verbose=0,
-    mode='auto', min_delta=0.0001, cooldown=0, min_lr=1e-10
+    mode='auto', min_delta=0.0001, cooldown=0, min_lr=1e-12
 )
 
 
-early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=20)
+early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001,restore_best_weights=True, patience=20)
 
 #training the NN
 history = Zundel_NN.fit(descriptors_train_nn,energies_train,
