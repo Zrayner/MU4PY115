@@ -33,7 +33,7 @@ energies = all_energies[::5]
 
 #parameters settings
 species = ["H","O"]
-sigma_SOAP = 0.7
+sigma_SOAP = 1
 periodic = False
 nmax = 4
 lmax = 5
@@ -141,8 +141,8 @@ for i_oxygens in range(n_oxygens):
 
 
 
-scaler_O_2 = MinMaxScaler()
-scaler_H_2 = MinMaxScaler()
+scaler_O_2 = MaxAbsScaler()
+scaler_H_2 = MaxAbsScaler()
 
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
@@ -213,7 +213,7 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 10
+batchsize = 200
 epochs= 1000
 
 #callbacks
@@ -339,7 +339,7 @@ for i_time in range(1,100):
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
-"""
+
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
@@ -385,7 +385,7 @@ plt.savefig('mc_energies.jpg')
 plt.clf()
 
         
-
+"""
         
 
         
