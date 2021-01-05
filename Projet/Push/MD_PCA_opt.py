@@ -281,7 +281,7 @@ def objective(space_params):
     history = Zundel_NN.fit(descriptors_train_nn,energies_train,
                                           batch_size=batchsize,
                                           epochs=epochs,
-                                          verbose=1,
+                                          verbose=2,
                                           callbacks=[early_stopping,lr_reduce],
                                           validation_data=(descriptors_val_nn,energies_val))
     
