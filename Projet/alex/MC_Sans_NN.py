@@ -204,6 +204,7 @@ delta = max(np.mean(dist,axis=0))
 print("delta=",delta)
 
 
+delta=1
 
 t = 0
 acceptation = []
