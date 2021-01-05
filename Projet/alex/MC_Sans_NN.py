@@ -118,8 +118,7 @@ for i_time in range(1,100):
         increment_aleatoire=np.random.random((n_atoms,3))*2*delta
         print("increment aleatoire",increment_aleatoire)
         try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire - delta  
-        print('oui')
-        print(try_position)
+        print(try_position.shape())
         try_energy = get_energy(try_position)
 
     
