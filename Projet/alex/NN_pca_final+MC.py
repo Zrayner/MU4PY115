@@ -217,8 +217,8 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 200
-epochs= 10
+batchsize = 10
+epochs= 1000
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
