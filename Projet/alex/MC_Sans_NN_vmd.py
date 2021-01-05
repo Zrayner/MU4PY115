@@ -30,7 +30,7 @@ from ase.build import molecule
 from ase import Atoms
 from ase.io import iread, write
 from keras.models import load_model
-
+form vmd.measure import bond
 
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
@@ -237,12 +237,12 @@ for i_time_mc in range(mc_time):
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
 
-distance00_MC = vmd.measure.bond(zundel_MC[0,:],zundel_MC[1,:],iread("trajectoire_MC.xyz"))
-distance00_DFT = vmd.measure.bond(zundel_DFT[0,:],iread("trajectoire_DFT.xyz"))
+distance00_MC = bond(zundel_MC[0,:],zundel_MC[1,:],iread("trajectoire_MC.xyz"))
+distance00_DFT = bond(zundel_DFT[0,:],iread("trajectoire_DFT.xyz"))
 
 plt.clf()
-plt.plot(np.linspace(0,8,mc_time),distance00_MC,color="red")
-plt.plot(np.linspace(0,8,mc_time),distance00_DFT,color="blue")
+plt.hist(distance00_MC,color="red",alpha=0.5)
+plt.hist(distance00_DFT,color="blue",alpha=0.5)
 plt.legend(['MC','DFT'],loc='best')
 plt.savefig('g(r)oxygens.jpg')
 
