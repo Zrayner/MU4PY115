@@ -210,7 +210,7 @@ for i_time in range(1,mc_time):
             acceptation.append(1)
         elif np.exp(-beta * diff_E) >= np.random.random():
             accepted_try_energies[n_iterations] = try_energy
-            accepteded_try_positions[n_iterations,:,:] = try_position
+            accepted_try_positions[n_iterations,:,:] = try_position
             n_iterations = n_iterations + 1
             acceptation.append(1)
         else:
