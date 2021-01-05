@@ -205,43 +205,43 @@ print("delta=",delta_theorique)
 
 liste_acceptation=[]
 
-for delta in [0.4,0.4,0.4,0.4,0.4]:
-    t = 0
-    acceptation = []
-    mc_positions = all_positions[:100,:,:]
-    mc_energies = all_energies[1:100+1]
-    guess_energy_overtime=np.empty(100)
-    guess_positions_overtime=np.empty([100,n_atoms,3])
-    guess_positions_overtime[0] = mc_positions[0,:,:]
-    for i_time in range(1,100):
-        accepted_try_positions = np.empty([50,n_atoms,3])
-        accepted_try_energys = np.empty(50)
-    
+for delta in [0.36,0.37,0.38,0.39,0.4]:
+    for i in range(5):
+        t = 0
+        acceptation = []
+        mc_positions = all_positions[:100,:,:]
+        mc_energies = all_energies[1:100+1]
+        guess_energy_overtime=np.empty(100)
+        guess_positions_overtime=np.empty([100,n_atoms,3])
+        guess_positions_overtime[0] = mc_positions[0,:,:]
+        for i_time in range(1,100):
+            accepted_try_positions = np.empty([50,n_atoms,3])
+            accepted_try_energys = np.empty(50)
         
-        while t<50:
-            increment_aleatoire=np.random.random((n_atoms,3))*2*delta
-            try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire - delta  
-            try_energy = get_energy(try_position)
-    
+            
+            while t<50:
+                increment_aleatoire=np.random.random((n_atoms,3))*2*delta
+                try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire - delta  
+                try_energy = get_energy(try_position)
         
-            diff_E = guess_energy_overtime[i_time-1] - try_energy
-            print("diff_E=",diff_E)
-            if diff_E < 0 : 
-                accepted_try_energys[t] = try_energy
-                accepted_try_positions[t,:,:] = try_position
-                t = t + 1
-                acceptation.append(1)
-            elif np.exp(-beta * diff_E) >= np.random.random():
-                accepted_try_energy[t] = try_energy
-                accepteded_try_positions[t,:,:] = try_position
-                t = t + 1
-                acceptation.append(1)
-            else:
-                acceptation.append(0)
-                pass
-        guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energys)]
-        guess_energy_overtime[i_time]=accepted_try_energys[np.argmin(accepted_try_energys)]
-     
-    liste_acceptation.append(np.mean(acceptation))
-    print("taux d'acceptation=",np.mean(acceptation))   
-print("Best acceptation",liste_acceptation)
+            
+                diff_E = guess_energy_overtime[i_time-1] - try_energy
+                if diff_E < 0 : 
+                    accepted_try_energys[t] = try_energy
+                    accepted_try_positions[t,:,:] = try_position
+                    t = t + 1
+                    acceptation.append(1)
+                elif np.exp(-beta * diff_E) >= np.random.random():
+                    accepted_try_energy[t] = try_energy
+                    accepteded_try_positions[t,:,:] = try_position
+                    t = t + 1
+                    acceptation.append(1)
+                else:
+                    acceptation.append(0)
+                    pass
+            guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energys)]
+            guess_energy_overtime[i_time]=accepted_try_energys[np.argmin(accepted_try_energys)]
+         
+        liste_acceptation.append(np.mean(acceptation))
+        print("taux d'acceptation=",np.mean(acceptation))   
+    print("Mean acceptation",np.mean(liste_acceptation))
