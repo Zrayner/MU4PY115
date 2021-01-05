@@ -227,7 +227,7 @@ for i_time in range(1,100):
         print('try_energy',try_energy)
 
     
-        diff_E = mc_energies[i_time] - try_energy
+        diff_E = guess_energy_overtime[i_time-1] - try_energy
         print("diff_E=",diff_E)
         if diff_E < 0 : 
             accepted_try_energys[t] = try_energy
@@ -243,7 +243,7 @@ for i_time in range(1,100):
             acceptation.append(0)
             pass
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energy)]
-    guess_energy_overtime[i_time]=accepted_try_energy[np.argmin(accepted_try_energy)]
+    guess_energy_overtime[i_time]=accepted_try_energys[np.argmin(accepted_try_energy)]
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
