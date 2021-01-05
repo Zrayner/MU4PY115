@@ -28,8 +28,9 @@ from sklearn.preprocessing import StandardScaler, MaxAbsScaler, MinMaxScaler
 from dscribe.descriptors import SOAP
 from ase.build import molecule
 from ase import Atoms
-from keras.models import load_model
 from ase.io import iread, write
+from keras.models import load_model
+
 
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
@@ -177,7 +178,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.6
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.65 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
@@ -233,8 +234,8 @@ print(np.shape(zundel_MC))
 for i_time_mc in range(mc_time):
       zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
 
-ase.io.write("trajectoire_MC.xyz",zundel_MC,append=True)
-ase.io.write("trajectoire_DFT.xyz",zundel_DFT,append=True)
+write("trajectoire_MC.xyz",zundel_MC,append=True)
+write("trajectoire_DFT.xyz",zundel_DFT,append=True)
 
 #distance00_MC = vmd.measure.bond(zundel_MC[0,:],ase.io.iread("trajectoire_MC.xyz"))
 
