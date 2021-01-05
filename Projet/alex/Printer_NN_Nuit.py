@@ -161,7 +161,7 @@ descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,
 #setting the train and test and validation set
 descriptors_train = descriptors_swap[:,:85000*2,:]
 descriptors_val = descriptors_swap[:,85000*2:95000*2,:]
-descriptors_test = descriptors_swap[:,85000*2:,:]
+descriptors_test = descriptors_swap[:,95000*2:,:]
 energies_train = scaled_energies[:85000*2]
 energies_val = scaled_energies[85000*2:95000*2]
 energies_test = scaled_energies[95000*2:]
@@ -241,7 +241,10 @@ Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 #descaling energies and outputs
 predicted_energies = Zundel_NN.predict(descriptors_test_nn)
 descaled_energies = energies_scaler.inverse_transform(scaled_energies)
+print(np.shape(descaled_energies))
+
 descaled_predicted_energies = energies_scaler.inverse_transform(predicted_energies)
+print(np.shape(descaled_predicted_energies))
 energy = np.linspace(0,0.008,200)
 print("max error=",max(np.absolute(descaled_energies[95000*2:]-descaled_predicted_energies)))
 plt.figure(figsize=[10, 5])
