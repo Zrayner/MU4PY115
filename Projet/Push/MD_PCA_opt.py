@@ -61,6 +61,7 @@ best_params_yet={'nmax': 4,
         'layers_units': 30,
         'layers_number': 2,
         'kernel_initializer': None,
+        'Scaler_2': MaxAbsScaler()
  
        
     
@@ -77,7 +78,7 @@ best_params_yet={'nmax': 4,
     
     } """
 
-Space= {'Scaler_2': hp.choice('Scaler_2', [StandardScaler(), MaxAbsScaler(), MinMaxScaler()]),
+Space= {'Scaler_2': hp.choice('Scaler_2', [ MaxAbsScaler()]),
 
                 
     
