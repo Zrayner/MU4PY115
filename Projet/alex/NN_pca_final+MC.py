@@ -48,6 +48,10 @@ model_params={
     
     }
 
+
+
+
+
 #soap settings
 soap = SOAP(
     species=species,
@@ -214,7 +218,7 @@ def compile_model(model):
 Zundel_NN = compile_model(zundel_model)
 
 batchsize = 200
-epochs= 100
+epochs= 10
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
@@ -256,6 +260,9 @@ plt.clf()
 plt.figure(figsize=[7,7])
 plt.plot(descaled_energies[95000*2:],descaled_predicted_energies,'.',markersize=2)
 plt.plot(energy,energy,markersize=2,color='red')
+plt.xlabel('True Energies (en Hartree)')
+plt.ylabel('Predicted Energies (en Hartree)')
+plt.legend(['Predicted Energy'], loc='best')
 plt.savefig('comparaison.jpg')
 
 """'''Monte-Carlo'''
