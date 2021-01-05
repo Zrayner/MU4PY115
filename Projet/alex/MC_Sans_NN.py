@@ -36,8 +36,7 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
-n_features = soap.get_number_of_features()
-n_dims = n_features
+
 n_elements = 2
 n_oxygens = 2
 n_hydrogens = 5
