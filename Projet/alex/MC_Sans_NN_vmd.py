@@ -204,7 +204,7 @@ for i_time in range(1,mc_time):
         try_energy = get_energy(try_position)
 
     
-        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * e * 27.211396641308 #1 hartree = 27,211396641308eV
+        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * 27.211396641308*e  #1 hartree = 27,211396641308eV
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
