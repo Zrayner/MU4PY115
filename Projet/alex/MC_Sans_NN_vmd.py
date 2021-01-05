@@ -45,8 +45,8 @@ energies = all_energies[::10]
 species = ["H","O"]
 sigma_SOAP = 0.7
 periodic = False
-nmax = 3
-lmax = 4
+nmax = 4
+lmax = 5
 rcut = 11.0
 
 #soap settings
