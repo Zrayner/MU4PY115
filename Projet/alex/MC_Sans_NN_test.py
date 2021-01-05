@@ -174,14 +174,14 @@ dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = np.mean(np.mean(dist,axis=0)) * 100
+delta = np.mean(np.mean(dist,axis=0)) * 5
 print("delta=",delta)
 
 
 
 
 
-n_iterations = 0
+
 mc_time = 100
 mc_iterations = 50
 acceptation = []
@@ -195,7 +195,7 @@ guess_positions_overtime[0] = all_positions[0,:,:]
 for i_time in range(1,mc_time):
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
     accepted_try_energies = np.empty(mc_iterations)
-
+    n_iterations = 0
     
     while n_iterations < mc_iterations:
         increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
@@ -219,8 +219,9 @@ for i_time in range(1,mc_time):
             pass
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
+    print('ok')
  
-print("taux d'acceptation=",np.mean(acceptation),"nombre tot iterations=",np.shape(acceptation))   
+print("taux d'acceptation=",np.mean(acceptation))   
 print(guess_positions_overtime[:,0,0])
 
 fig = plt.figure()
