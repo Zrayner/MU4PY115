@@ -178,7 +178,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.65 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.8 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
@@ -237,11 +237,14 @@ for i_time_mc in range(mc_time):
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
 
-#distance00_MC = vmd.measure.bond(zundel_MC[0,:],ase.io.iread("trajectoire_MC.xyz"))
+distance00_MC = vmd.measure.bond(zundel_MC[0,:],zundel_MC[1,:],iread("trajectoire_MC.xyz"))
+distance00_DFT = vmd.measure.bond(zundel_DFT[0,:],iread("trajectoire_DFT.xyz"))
 
-
-
-
+plt.clf()
+plt.plot(np.linspace(0,8,mc_time),distance00_MC,color="red")
+plt.plot(np.linspace(0,8,mc_time),distance00_DFT,color="blue")
+plt.legend(['MC','DFT'],loc='best')
+plt.savefig('g(r)oxygens.jpg')
 
 
 
