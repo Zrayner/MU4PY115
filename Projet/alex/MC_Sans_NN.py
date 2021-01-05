@@ -65,7 +65,11 @@ n_oxygens = 2
 n_hydrogens = 5
 n_atoms = n_hydrogens + n_oxygens
 
+scaler_O_1 = StandardScaler()
+scaler_H_1 = StandardScaler()
 
+scaler_O_2 = MinMaxScaler()
+scaler_H_2 = MinMaxScaler()
 
 def get_energy(positions):
 
