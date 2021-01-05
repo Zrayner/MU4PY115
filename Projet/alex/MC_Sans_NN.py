@@ -203,9 +203,10 @@ for i_configs in range(n_configs-1):
 delta_theorique = max(np.mean(dist,axis=0)) 
 print("delta=",delta_theorique)
 
-liste_acceptation=[]
+
 
 for delta in [0.36,0.37,0.38,0.39,0.4]:
+    liste_acceptation=[]
     print("Delta",delta)
     for i in range(20):
         t = 0
