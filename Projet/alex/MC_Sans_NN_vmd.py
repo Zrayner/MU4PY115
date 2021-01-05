@@ -28,7 +28,7 @@ from sklearn.preprocessing import StandardScaler, MaxAbsScaler, MinMaxScaler
 from dscribe.descriptors import SOAP
 from ase.build import molecule
 from ase import Atoms
-from ase.io import iread, write
+from ase.io import xyz.read_xyz, write
 from keras.models import load_model
 from vmd import measure
 
@@ -178,12 +178,12 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.6 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.62 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
-mc_time = 10
-mc_iterations = 50
+mc_time = 100
+mc_iterations = 20
 acceptation = []
 hartree = 1.602176*27.211297e-19
 
@@ -232,21 +232,13 @@ zundel_DFT = np.empty(mc_time,dtype=object )
 for i_time_mc in range(mc_time):
       zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
 
-print(np.shape(zundel_MC))
 for i_time_mc in range(mc_time):
       zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
 
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
-print(iread("trajectoire_MC.xyz"))
-distance00_MC = measure.bond(0,1,iread("trajectoire_MC.xyz"))
-distance00_DFT = measure.bond(0,1,iread("trajectoire_DFT.xyz"))
 
-plt.clf()
-plt.hist(distance00_MC,color="red",alpha=0.5)
-plt.hist(distance00_DFT,color="blue",alpha=0.5)
-plt.legend(['MC','DFT'],loc='best')
-plt.savefig('g(r)oxygens.jpg')
+
 
 
 
