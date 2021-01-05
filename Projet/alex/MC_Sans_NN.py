@@ -36,7 +36,30 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
+positions = all_positions[::10]
+energies = all_energies[1::10]
 
+#parameters settings
+species = ["H","O"]
+sigma_SOAP = 0.7
+periodic = False
+nmax = 3
+lmax = 4
+rcut = 11.0
+
+#soap settings
+soap = SOAP(
+    species=species,
+    sigma=sigma_SOAP,
+    periodic=False,
+    rcut=rcut,
+    nmax=nmax,
+    lmax=lmax,
+    sparse=False,
+)
+
+n_configs = np.shape(positions)[0]
+n_features = soap.get_number_of_features()
 n_elements = 2
 n_oxygens = 2
 n_hydrogens = 5
@@ -65,6 +88,17 @@ def get_energy(positions):
         descriptors_nn.append(np.int_(desc))
     
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))[0][0]
+
+
+T = 100
+k = 1.380649e-23
+beta = 1/(T*k)
+dist = np.empty([n_configs-1,3])
+for i_configs in range(n_configs-1):
+    for j_pos in range(3):
+        dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
+delta = max(np.mean(dist,axis=0)) 
+print("delta=",delta)
 
 
 
