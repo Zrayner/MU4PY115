@@ -232,6 +232,9 @@ lr_reduce = keras.callbacks.ReduceLROnPlateau(
 
 early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=10)
 
+
+from keras.models import load_model
+
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
 
