@@ -205,7 +205,7 @@ print("delta=",delta_theorique)
 
 liste_acceptation=[]
 
-for delta in [0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]:
+for delta in [0.3,,0.32,0.34,0.36,0.38,0.4]:
     t = 0
     acceptation = []
     mc_positions = all_positions[:100,:,:]
