@@ -222,7 +222,7 @@ for i_time in range(1,mc_time):
     print("mc_time=",i_time)
     
  
-print("taux d'acceptation=",np.mean(acceptation))  
+print("taux d'acceptation=",np.mean(acceptation),acceptation)  
 
 zundel_MC = np.empty(mc_time,dtype=object )
 zundel_DFT = np.empty(mc_time,dtype=object )
@@ -237,7 +237,7 @@ for i_time_mc in range(mc_time):
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
 
-distance00_MC = measure.bond(zundel_MC[0,:],zundel_MC[1,:],iread("trajectoire_MC.xyz"))
+distance00_MC = measure.bond(zundel_MC[0],zundel_MC[1],iread("trajectoire_MC.xyz"))
 distance00_DFT = measure.bond(zundel_DFT[0,:],iread("trajectoire_DFT.xyz"))
 
 plt.clf()
