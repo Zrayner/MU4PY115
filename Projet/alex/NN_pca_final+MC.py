@@ -214,16 +214,16 @@ def compile_model(model):
 Zundel_NN = compile_model(zundel_model)
 
 batchsize = 200
-epochs= 1000
+epochs= 100
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
-    monitor='loss', factor=0.1, patience=4, verbose=0,
+    monitor='loss', factor=0.5, patience=4, verbose=0,
     mode='auto', min_delta=0.0001, cooldown=0, min_lr=1e-10
 )
 
 
-early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=10)
+early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=20)
 
 #training the NN
 history = Zundel_NN.fit(descriptors_train_nn,energies_train,
