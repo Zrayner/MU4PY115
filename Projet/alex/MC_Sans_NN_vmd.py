@@ -218,10 +218,14 @@ for i_time in range(1,mc_time):
             pass
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
-    print('i_time')
+    print("mc_time=",i_time)
     
  
-print("taux d'acceptation=",np.mean(acceptation))   
+print("taux d'acceptation=",np.mean(acceptation))  
+
+zundel_MC = np.empty(mc_time,dtype=object )
+zundel_DFT = np.empty(mc_time,dtype=object )
+ 
 for i_time_mc in range(mc_time):
       zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
 
