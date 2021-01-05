@@ -30,7 +30,7 @@ from ase.build import molecule
 from ase import Atoms
 from ase.io import iread, write
 from keras.models import load_model
-form vmd.measure import bond
+from vmd.measure import bond
 
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
