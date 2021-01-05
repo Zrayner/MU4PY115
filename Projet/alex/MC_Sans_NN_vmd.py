@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jan  5 02:07:32 2021
-
-@author: ewenf
-"""
 from __future__ import print_function
 import tensorflow as tf
 import keras,sklearn
@@ -19,9 +13,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 seed=0
 np.random.seed(seed) # fix random seed
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler, MaxAbsScaler, MinMaxScaler
 
@@ -30,7 +21,6 @@ from ase.build import molecule
 from ase import Atoms
 from ase.io import write
 from keras.models import load_model
-from vmd import measure
 
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
@@ -39,8 +29,8 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
 
-positions = all_positions[::10]
-energies = all_energies[::10]
+positions = all_positions[::5]
+energies = all_energies[::5]
 
 #parameters settings
 species = ["H","O"]
@@ -178,11 +168,11 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.62 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.5 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
-mc_time = 100
+mc_time = 1000
 mc_iterations = 20
 acceptation = []
 hartree = 1.602176*27.211297e-19
@@ -219,7 +209,6 @@ for i_time in range(1,mc_time):
             acceptation.append(0)
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
-    print("mc_time=",i_time)
     i_time = i_time + 1
 
     
