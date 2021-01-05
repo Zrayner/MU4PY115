@@ -180,7 +180,7 @@ def model(params):
     model.add(Dense(1,))
   
         
-  return model
+    return model
 
 
 
