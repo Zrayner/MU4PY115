@@ -177,7 +177,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0)),axis=1)) * 0.8
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.8
 print("delta=",delta)
 
 
