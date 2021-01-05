@@ -297,9 +297,12 @@ try_energy_overtime=np.empty(100)
 try_positions_overtime=np.empty(100)
 for i_time in range(1,100):
     try_positions = np.empty([50,n_atoms,3])
+    try_positions[t] = mc_positions[0,:,:]
     try_energy = np.empty(50)
     while t<50:
-        try_positions[t] = mc_positions[i_time,:,:] + np.random.random((n_atoms,3))*2*delta - delta  
+        increment_aleatoire=np.random.random((n_atoms,3))*2*delta
+        print(increment_aleatoire)
+        try_positions[t] = mc_positions[i_time,:,:] + increment_aleatoire - delta  
         try_energy[t] = get_energy(try_positions[t])
 
     
