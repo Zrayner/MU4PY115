@@ -28,7 +28,7 @@ from sklearn.preprocessing import StandardScaler, MaxAbsScaler, MinMaxScaler
 from dscribe.descriptors import SOAP
 from ase.build import molecule
 from ase import Atoms
-from ase.io import xyz.read_xyz, write
+from ase.io import write
 from keras.models import load_model
 from vmd import measure
 
