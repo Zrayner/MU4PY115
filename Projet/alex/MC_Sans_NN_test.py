@@ -174,7 +174,7 @@ dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = np.mean(np.mean(dist,axis=0)) * 2
+delta = np.mean(np.mean(dist,axis=0)) * 4
 print("delta=",delta)
 
 
@@ -221,6 +221,7 @@ for i_time in range(1,mc_time):
     guess_energy_overtime[i_time] = min(accepted_try_energies)
  
 print("taux d'acceptation=",np.mean(acceptation),"nombre tot iterations=",np.shape(acceptation))   
+print(guess_positions_overtime[:,0,0])
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
