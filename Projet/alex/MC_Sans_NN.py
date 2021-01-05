@@ -107,7 +107,7 @@ acceptation = []
 mc_positions = all_positions[:100,:,:]
 mc_energies = all_energies[1:100+1]
 guess_energy_overtime=np.empty(100)
-guess_positions_overtime=np.empty([100,50,n_atoms,3])
+guess_positions_overtime=np.empty([100,n_atoms,3])
 guess_positions_overtime[0] = mc_positions[0,:,:]
 for i_time in range(1,100):
     accepted_try_positions = np.empty([50,n_atoms,3])
