@@ -310,7 +310,7 @@ for i_time in range(1,100):
         print("diff_E=",diff_E)
         if diff_E < 0 : 
             mc_energies[t] = try_energy[t]
-            mc_positions[t,:,:] = try_positions
+            mc_positions[t,:,:] = try_positions[t]
             t = t + 1
             acceptation.append(1)
         elif np.exp(-beta * diff_E) >= np.random.random():
