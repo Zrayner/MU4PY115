@@ -215,8 +215,10 @@ for i_time in range(1,mc_time):
             accepted_try_positions[n_iterations,:,:] = try_position
             n_iterations = n_iterations + 1
             acceptation.append(1)
+            print(1)
         else:
             acceptation.append(0)
+            print(0)
             pass
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
