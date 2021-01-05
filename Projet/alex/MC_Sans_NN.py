@@ -247,3 +247,5 @@ for delta in [0.38,0.382,0.384,0.386,0.388,0.39]:
         liste_acceptation.append(np.mean(acceptation))
         print("taux d'acceptation=",np.mean(acceptation))   
     print("Mean acceptation",np.mean(liste_acceptation))
+
+Best_Delta_Yet=0.385

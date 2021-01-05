@@ -28,16 +28,25 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
-positions = all_positions[::10]
-energies = all_energies[1::10]
+positions = all_positions[::2]
+energies = all_energies[1::2]
 
 #parameters settings
 species = ["H","O"]
 sigma_SOAP = 0.7
 periodic = False
-nmax = 3
-lmax = 4
+nmax = 4
+lmax = 5
 rcut = 11.0
+
+model_params={
+        'layers_units': 30,
+        'layers_number': 2,
+        'kernel_initializer': None,
+ 
+       
+    
+    }
 
 #soap settings
 soap = SOAP(
@@ -143,12 +152,12 @@ descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,
 
 
 #setting the train and test and validation set
-descriptors_train = descriptors_swap[:,:85000,:]
-descriptors_val = descriptors_swap[:,85000:95000,:]
-descriptors_test = descriptors_swap[:,95000:,:]
-energies_train = scaled_energies[:85000]
-energies_val = scaled_energies[85000:95000]
-energies_test = scaled_energies[95000:]
+descriptors_train = descriptors_swap[:,:400000,:]
+descriptors_val = descriptors_swap[:,400000:450000,:]
+descriptors_test = descriptors_swap[:,450000:,:]
+energies_train = scaled_energies[:400000]
+energies_val = scaled_energies[400000:450000]
+energies_test = scaled_energies[450000:]
 
 
 #creating a list of array to fit in the NN
@@ -163,19 +172,20 @@ for i_atom in range(n_atoms):
 
 
 
-def model():
-    
+def model(params):
+        
     model = Sequential()
-    model.add(Dense(30, activation='tanh'))
-    model.add(Dense(30, activation='tanh'))
+    for i in range(params['layers_number']):
+        model.add(Dense(params['layers_units'], activation='tanh',kernel_initializer=params['kernel_initializer']))
     model.add(Dense(1,))
-    
-    return model
+  
+        
+  return model
 
 
 
-model0 = model()
-modelH = model()
+model0 = model(model_params)
+modelH = model(model_params)
 
 inputs = []
 for i_atoms in range(n_atoms):
@@ -203,8 +213,8 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 200
-epochs= 200
+batchsize = 10
+epochs= 300
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
@@ -248,7 +258,7 @@ plt.plot(descaled_energies[95000:],descaled_predicted_energies,'.',markersize=2)
 plt.plot(energy,energy,markersize=2,color='red')
 plt.savefig('comparaison.jpg')
 
-'''Monte-Carlo'''
+"""'''Monte-Carlo'''
 
 
 from mpl_toolkits.mplot3d import Axes3D
@@ -329,7 +339,7 @@ for i_time in range(1,100):
      
 print("taux d'acceptation=",np.mean(acceptation))   
 
-
+"""
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
