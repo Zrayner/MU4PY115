@@ -220,8 +220,7 @@ for i_time in range(1,mc_time):
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
  
-print("taux d'acceptation=",np.mean(acceptation))   
-
+print("taux d'acceptation=",np.mean(acceptation),"nombre tot iterations=",np.shape(acceptation))   
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
