@@ -22,6 +22,7 @@ from ase import Atoms
 from ase.io import write
 from keras.models import load_model
 
+
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
 datapath='../../../'
@@ -168,7 +169,7 @@ for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
-delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.5 #facteur tq taux acceptation = 0.4
+delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.4 #facteur tq taux acceptation = 0.4
 print("delta=",delta)
 
 
@@ -226,10 +227,6 @@ for i_time_mc in range(mc_time):
 
 write("trajectoire_MC.xyz",zundel_MC,append=True)
 write("trajectoire_DFT.xyz",zundel_DFT,append=True)
-
-
-
-
 
 
 
