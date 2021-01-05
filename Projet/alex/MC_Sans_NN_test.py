@@ -191,7 +191,7 @@ guess_positions_overtime = np.empty([mc_time,n_atoms,3])
 guess_positions_overtime[0] = all_positions[0,:,:] / delta
 
 
-for i_time in range(1,_mc_time):
+for i_time in range(1,mc_time):
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
     accepted_try_energies = np.empty(mc_iterations)
 
