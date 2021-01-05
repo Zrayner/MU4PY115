@@ -174,7 +174,7 @@ dist = np.empty([n_configs-1,3])
 for i_configs in range(n_configs-1):
     for j_pos in range(3):
         dist[i_configs,j_pos] = np.absolute(all_positions[i_configs,2,j_pos]-all_positions[i_configs+1,2,j_pos])
-delta = np.mean(np.mean(dist,axis=0)) * 1.2
+delta = np.mean(np.mean(dist,axis=0)) * 1.5
 print("delta=",delta)
 
 
@@ -185,6 +185,7 @@ n_iterations = 0
 mc_time = 100
 mc_iterations = 50
 acceptation = []
+e = 1.602176e-19
 
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
@@ -202,7 +203,7 @@ for i_time in range(1,mc_time):
         try_energy = get_energy(try_position)
 
     
-        diff_E = (guess_energy_overtime[i_time-1] - try_energy)
+        diff_E = (guess_energy_overtime[i_time-1] - try_energy) * e
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
