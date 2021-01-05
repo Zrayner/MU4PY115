@@ -28,8 +28,8 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))
 
-positions = all_positions[::2]
-energies = all_energies[1::2]
+positions = all_positions[::5]
+energies = all_energies[1::5]
 
 #parameters settings
 species = ["H","O"]
@@ -152,12 +152,12 @@ descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,
 
 
 #setting the train and test and validation set
-descriptors_train = descriptors_swap[:,:400000,:]
-descriptors_val = descriptors_swap[:,400000:450000,:]
-descriptors_test = descriptors_swap[:,450000:,:]
-energies_train = scaled_energies[:400000]
-energies_val = scaled_energies[400000:450000]
-energies_test = scaled_energies[450000:]
+descriptors_train = descriptors_swap[:,:85000*2,:]
+descriptors_val = descriptors_swap[:,85000*2:95000*2,:]
+descriptors_test = descriptors_swap[:,85000*2:,:]
+energies_train = scaled_energies[:85000*2]
+energies_val = scaled_energies[85000*2:95000*2]
+energies_test = scaled_energies[95000*2:]
 
 
 #creating a list of array to fit in the NN
@@ -214,16 +214,16 @@ def compile_model(model):
 Zundel_NN = compile_model(zundel_model)
 
 batchsize = 10
-epochs= 300
+epochs= 1000
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
-    monitor='loss', factor=0.1, patience=2, verbose=0,
+    monitor='loss', factor=0.1, patience=4, verbose=0,
     mode='auto', min_delta=0.0001, cooldown=0, min_lr=1e-10
 )
 
 
-early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=4)
+early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001, patience=10)
 
 #training the NN
 history = Zundel_NN.fit(descriptors_train_nn,energies_train,
