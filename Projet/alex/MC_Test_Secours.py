@@ -189,7 +189,7 @@ guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
 guess_positions_overtime[0] = all_positions[0,:,:]
 
-for delta in [0.001,0.002,0.003,0.004,0.005,0.006,0.007,0.008,0.009,0.01]:
+for delta in [0.01,0.015,0.02,0.025,0.03,0.035,0.04,0.045]:
     print('delta',delta)
     acceptation = []
     for i_time in range(1,mc_time):
