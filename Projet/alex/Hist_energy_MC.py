@@ -38,4 +38,4 @@ all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
 
 Guess_energy=np.load('guess_energy_overtime.npy')
-print(Guess_energy)
+print(np.shape(Guess_energy))
