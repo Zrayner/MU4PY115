@@ -32,6 +32,16 @@ all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'
 
 #parameters settings
 
+molecule_params={
+        'n_elements': 2,
+        'n_oxygens': 2,
+        'n_hydrogens': 5,
+        'molecules_order':[8,8,1,1,1,1,1]
+ 
+       
+    
+    }
+
 
 dscribe_params={
         'nmax': 4,
@@ -107,16 +117,14 @@ soap = SOAP(nmax=dscribe_params['nmax'],
 n_configs = np.shape(positions)[0]
 n_features = soap.get_number_of_features()
 n_dims = n_features
-n_elements = 2
-n_oxygens = 2
-n_hydrogens = 5
-n_atoms = n_hydrogens + n_oxygens
+
+n_atoms = molecule_params['n_hydrogens'] + molecule_params['n_oxygens']
 
 
 #zundel molecule creation
 zundels = np.empty(n_configs,dtype=object )
 for i_configs in range(n_configs):
-      zundels[i_configs] = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions[i_configs])
+      zundels[i_configs] = Atoms(numbers=molecule_params['molecules_order'], positions=positions[i_configs])
 
 
 # computing descriptors for each positions
@@ -131,8 +139,8 @@ scaled_energies = energies_scaler.transform(energies.reshape((-1,1)))
 
 
 
-n_features_oxygens = n_configs*n_oxygens
-n_features_hydrogens = n_configs*n_hydrogens
+n_features_oxygens = n_configs*molecule_params['n_oxygens']
+n_features_hydrogens = n_configs*molecule_params['n_hydrogens']
 
 
 scaled_descriptors = np.empty([n_features_hydrogens+n_features_oxygens,n_dims])
