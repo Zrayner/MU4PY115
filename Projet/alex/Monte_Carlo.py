@@ -29,7 +29,7 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
 
-
+Zundel_NN=load_model('Fitted_Zundel_NN.h5')
 
 #parameters settings
 
