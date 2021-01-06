@@ -260,7 +260,7 @@ hartree = 1.602176*27.211297e-19 #covert hartree to Joules
 delta=0.01 #lenght of the box where atoms are moving
 
 #save MC positions over time
-def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
+def save(i_time,acceptation,guess_positions_overtime):
     print('saving')
     print("taux d'acceptation=",np.mean(acceptation))  
     zundel_MC = np.empty(i_time,dtype=object )
@@ -274,7 +274,7 @@ def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
     
     write("trajectoire_MC_handpicked_Ew.xyz",zundel_MC,append=True)
     write("trajectoire_DFT_handpicked_Ew.xyz",zundel_DFT,append=True)
-    np.save('guess_energy_overtime',guess_energy_overtime)
+
 
 
 
@@ -315,7 +315,7 @@ while i_time<mc_time:
 
 
 #save the data
-save(mc_time-1,acceptation,guess_positions_overtime,guess_energy_overtime)
+"""save(mc_time-1,acceptation,guess_positions_overtime)"""
 
 
 
