@@ -57,9 +57,9 @@ model_params={
 
 
 data_params={
-        'slicing': 10,
-        'train_ratio':0.85,
-        'val_ratio':0.10,
+        'slicing': 30,
+        'train_ratio':0.8,
+        'val_ratio':0.05,
   
  
        
