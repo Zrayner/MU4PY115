@@ -207,7 +207,7 @@ def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
     
     write("trajectoire_MC_handpicked_Ew.xyz",zundel_MC,append=True)
     write("trajectoire_DFT_handpicked_Ew.xyz",zundel_DFT,append=True)
-    write("energy_overtime.xyz",guess_energy_overtime,append=True)
+    np.save('guess_energy_overtime',guess_energy_overtime)
 
 
 
