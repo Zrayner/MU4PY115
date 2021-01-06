@@ -186,8 +186,8 @@ print("dimension desc post pca=", pca_treshold, "\n"
 
 scaled_pca_descriptors = np.empty([n_configs,n_atoms,n_dims])
 for i_hydrogens in range(molecule_params['n_hydrogens'] ):
-    scaled_pca_descriptors[:,i_hydrogens+n_oxygens,:] = pca_hydrogens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_hydrogens+n_oxygens,:])
-for i_oxygens in range(n_oxygens):
+    scaled_pca_descriptors[:,i_hydrogens+molecule_params['n_oxygens'],:] = pca_hydrogens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_hydrogens+n_oxygens,:])
+for i_oxygens in range(molecule_params['n_oxygens']):
     scaled_pca_descriptors[:,i_oxygens,:] = pca_oxygens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_oxygens,:])
     
 #scaling post pca
@@ -248,10 +248,10 @@ for i_atoms in range(n_atoms):
     inputs.append(keras.layers.Input(shape=(pca_treshold,)))
 
 subnets = []
-for i_oxygens in range(n_oxygens):
+for i_oxygens in range(molecule_params['n_oxygens']):
     subnets.append(model0(inputs[i_oxygens]))
 for j_hydrogens in range(molecule_params['n_hydrogens'] ):
-    subnets.append(modelH(inputs[i_hydrogens+n_oxygens]))
+    subnets.append(modelH(inputs[i_hydrogens+molecule_params['n_oxygens']]))
     
 
 added = keras.layers.Add()(subnets)
