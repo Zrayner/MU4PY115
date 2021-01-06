@@ -186,7 +186,7 @@ print("dimension desc post pca=", pca_treshold, "\n"
 
 scaled_pca_descriptors = np.empty([n_configs,n_atoms,n_dims])
 for i_hydrogens in range(molecule_params['n_hydrogens'] ):
-    scaled_pca_descriptors[:,i_hydrogens+molecule_params['n_oxygens'],:] = pca_hydrogens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_hydrogens+n_oxygens,:])
+    scaled_pca_descriptors[:,i_hydrogens+molecule_params['n_oxygens'],:] = pca_hydrogens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_hydrogens+molecule_params['n_oxygens'],:])
 for i_oxygens in range(molecule_params['n_oxygens']):
     scaled_pca_descriptors[:,i_oxygens,:] = pca_oxygens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_oxygens,:])
     
