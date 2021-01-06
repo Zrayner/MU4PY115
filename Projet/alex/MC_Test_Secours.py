@@ -196,11 +196,12 @@ for delta in [0.0001,0.001,0.01]:
     print('delta',delta)
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
     accepted_try_energies = np.empty(mc_iterations)
-    n_iterations = 0
+    
     list_acceptation=[]
     for i in range(20):
         print('i',n_iterations)
         acceptation = []
+        n_iterations = 0
         while n_iterations < mc_iterations:
             print('while',n_iterations)
             increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
