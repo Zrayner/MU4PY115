@@ -34,7 +34,7 @@ energies = all_energies[::5]
 
 #parameters settings
 species = ["H","O"]
-sigma_SOAP = 0.7
+sigma_SOAP = 1
 periodic = False
 nmax = 4
 lmax = 5
