@@ -29,6 +29,7 @@ from sklearn.preprocessing import StandardScaler, MaxAbsScaler, MinMaxScaler
 from dscribe.descriptors import SOAP
 from ase.build import molecule
 from ase import Atoms
+from keras.models import load_model
 
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
@@ -233,7 +234,7 @@ for i_atom in range(n_atoms):
     descriptors_val_nn.append(descriptors_val[i_atom,:,:])
 
 Zundel_NN = load_model('Fitted_Zundel_NN.h5')
-
+Zundel_NN.summary()
 #descaling energies and outputs
 predicted_energies = Zundel_NN.predict(descriptors_test_nn)
 descaled_energies = energies_scaler.inverse_transform(scaled_energies)
