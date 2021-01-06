@@ -193,15 +193,16 @@ guess_positions_overtime[0] = all_positions[0,:,:]
 
 
 for delta in [0.0001,0.001,0.01]:
-    print(delta)
+    print('delta',delta)
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
     accepted_try_energies = np.empty(mc_iterations)
     n_iterations = 0
     list_acceptation=[]
     for i in range(20):
+        print('i',n_iterations)
         acceptation = []
         while n_iterations < mc_iterations:
-            print(n_iterations)
+            print('while',n_iterations)
             increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
             try_position = guess_positions_overtime[0,:,:] + increment_aleatoire 
             try_energy = get_energy(try_position)
@@ -221,6 +222,7 @@ for delta in [0.0001,0.001,0.01]:
             else:
                 acceptation.append(0)
         list_acceptation.append(np.mean(acceptation))
+        print(np.mean(acceptation))
     print(np.mean(list_acceptation))
     
  
