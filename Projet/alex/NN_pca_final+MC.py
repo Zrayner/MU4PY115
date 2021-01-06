@@ -176,7 +176,7 @@ scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:
 descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,n_dims)[:,:,:pca_treshold],0,1)
 
 train_limit=int(data_params['train_ratio']*n_configs)
-val_limit=int((data_params['train_ratio'+data_params['val_ratio'])*n_configs)
+val_limit=int((data_params['train_ratio']+data_params['val_ratio'])*n_configs)
 
 print('nconfig',n_configs)
 print('train_limit',train_limit)
