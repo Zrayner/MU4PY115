@@ -248,8 +248,8 @@ for i_atoms in range(n_atoms):
     inputs.append(keras.layers.Input(shape=(pca_treshold,)))
 
 subnets = []
-for i_oxygens in range(molecule_params['n_oxygens']):
-    subnets.append(model0(inputs[i_oxygens]))
+for j_oxygens in range(molecule_params['n_oxygens']):
+    subnets.append(model0(inputs[j_oxygens]))
 for j_hydrogens in range(molecule_params['n_hydrogens'] ):
     subnets.append(modelH(inputs[j_hydrogens+molecule_params['n_oxygens']]))
     
