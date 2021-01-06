@@ -210,7 +210,7 @@ def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
     np.save('guess_energy_overtime',guess_energy_overtime)
 
 
-
+i_time=1
 while i_time<mc_time:
     print(i_time/mc_time*100,'%')
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
