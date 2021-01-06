@@ -183,7 +183,7 @@ for i_atom in range(n_atoms):
 
 
 
-Zundel_NN.load('Fitted_Zundel_NN.h5')
+Zundel_NN = load_model('Fitted_Zundel_NN.h5')
 
 #descaling energies and outputs
 predicted_energies = Zundel_NN.predict(descriptors_test_nn)
