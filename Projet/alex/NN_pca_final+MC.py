@@ -58,13 +58,24 @@ model_params={
 
 data_params={
         'slicing': 30,
-        'train_ratio':0.8,
-        'val_ratio':0.05,
+        'train_ratio':0.85,
+        'val_ratio':0.1,
   
  
        
     
     }
+
+PCA_params={
+        'Scaler_Pre_PCA': StandardScaler(),
+        'Scaler_Post_PCA':StandardScaler(),
+        'pca_pourcentage':0.999999,
+  
+ 
+       
+    
+    }
+
 
 fit_params={
         'epochs': 10,
@@ -127,8 +138,8 @@ n_features_hydrogens = n_configs*n_hydrogens
 scaled_descriptors = np.empty([n_features_hydrogens+n_features_oxygens,n_dims])
 
 
-scaler_O_1 = StandardScaler()
-scaler_H_1 = StandardScaler()
+scaler_O_1 = PCA_params['Scaler_Pre_PCA']
+scaler_H_1 = PCA_params['Scaler_Pre_PCA']
 scaled_descriptors[n_features_oxygens:,:] = scaler_H_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:])
 scaled_descriptors[:n_features_oxygens,:] = scaler_O_1.fit_transform(descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:])
 
@@ -152,11 +163,11 @@ var_ratio_hydrogens = 0
 pca_treshold_hydrogens = 0
 pca_treshold_oxygens = 0
 
-while var_ratio_hydrogens<0.999999:
+while var_ratio_hydrogens<PCA_params['pca_pourcentage']:
     var_ratio_hydrogens +=  var_ratio_pca_hydrogens[pca_treshold_hydrogens]
     pca_treshold_hydrogens += 1
     
-while var_ratio_oxygens<0.999999:
+while var_ratio_oxygens<PCA_params['pca_pourcentage']:
     var_ratio_oxygens += var_ratio_pca_oxygens[pca_treshold_oxygens]
     pca_treshold_oxygens += 1
         
@@ -175,8 +186,8 @@ for i_oxygens in range(n_oxygens):
 
 
 
-scaler_O_2 = StandardScaler()
-scaler_H_2 = StandardScaler()
+scaler_O_2 = PCA_params['Scaler_Post_PCA']
+scaler_H_2 = PCA_params['Scaler_Post_PCA']
 
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
