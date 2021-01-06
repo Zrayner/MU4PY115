@@ -227,8 +227,8 @@ for i_time_mc in range(mc_time):
 for i_time_mc in range(mc_time):
       zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
 
-write("trajectoire_MC.xyz",zundel_MC,append=True)
-write("trajectoire_DFT.xyz",zundel_DFT,append=True)
+write("trajectoire_MC_handpicked.xyz",zundel_MC,append=True)
+write("trajectoire_DFT_handpicked.xyz",zundel_DFT,append=True)
 
 
 
