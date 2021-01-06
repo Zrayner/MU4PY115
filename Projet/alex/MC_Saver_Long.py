@@ -171,16 +171,16 @@ k = 1.380649e-23
 beta = 1/(T*k)
 
 
-dist = np.empty([n_configs-1,n_atoms,3])
+"""dist = np.empty([n_configs-1,n_atoms,3])
 for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
         for j_pos in range(3):
             dist[i_configs,i_atom,j_pos] = np.absolute(all_positions[i_configs,i_atom,j_pos]-all_positions[i_configs+1,i_atom,j_pos])
 delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0),axis=1))) * 0.1 #facteur tq taux acceptation = 0.4
-print("delta=",delta)
+print("delta=",delta)"""
 
 
-mc_time = 10000
+mc_time = 100000
 
 acceptation = []
 hartree = 1.602176*27.211297e-19
@@ -189,9 +189,7 @@ delta=0.01
 save_ratio=0.01
 
 
-guess_energy_overtime = np.empty(mc_time)
-guess_positions_overtime = np.empty([mc_time,n_atoms,3])
-guess_positions_overtime[0] = all_positions[0,:,:]
+
 
 def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
     print('saving')
@@ -210,11 +208,16 @@ def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
     np.save('guess_energy_overtime',guess_energy_overtime)
 
 
+
+
+guess_energy_overtime = np.empty(mc_time)
+guess_positions_overtime = np.empty([mc_time,n_atoms,3])
+guess_positions_overtime[0] = all_positions[0,:,:]
+
+
 i_time=1
 while i_time<mc_time:
     print(i_time/mc_time*100,'%')
-    accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
-    accepted_try_energies = np.empty(mc_iterations)
 
     
 
