@@ -196,8 +196,8 @@ guess_positions_overtime[0] = all_positions[0,:,:]
 def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
     print('saving')
     print("taux d'acceptation=",np.mean(acceptation))  
-    zundel_MC = np.empty(mc_time,dtype=object )
-    zundel_DFT = np.empty(mc_time,dtype=object )
+    zundel_MC = np.empty(i_time,dtype=object )
+    zundel_DFT = np.empty(i_time,dtype=object )
      
     for i_time_mc in range(i_time):
           zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
