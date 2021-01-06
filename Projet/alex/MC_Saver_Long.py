@@ -239,7 +239,9 @@ while i_time<mc_time:
         acceptation.append(1)
     else:
         acceptation.append(0)
-    
+        guess_positions_overtime[i_time] = guess_positions_overtime[i_time-1] 
+        guess_energy_overtime[i_time]=guess_energy_overtime[i_time-1]
+        i_time+=1
 
     if i_time/mc_time>save_ratio:
         save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime)
