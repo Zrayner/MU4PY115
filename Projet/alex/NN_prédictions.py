@@ -191,7 +191,7 @@ predicted_energies = Zundel_NN.predict(descriptors_test_nn)
 descaled_energies = energies_scaler.inverse_transform(scaled_energies)
 descaled_predicted_energies = energies_scaler.inverse_transform(predicted_energies)
 energy = np.linspace(0,0.008,200)
-print("mean error=",np.mean(np.absolute(descaled_energies[95000*2:]-descaled_predicted_energies)))
+print("mean error=",max(np.absolute(descaled_energies[95000*2:]-descaled_predicted_energies)))
 plt.figure(figsize=[10, 5])
 
 
