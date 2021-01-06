@@ -35,7 +35,7 @@ energies = all_energies[::5]
 
 #parameters settings
 species = ["H","O"]
-sigma_SOAP = 0.7
+sigma_SOAP = 1
 periodic = False
 nmax = 4
 lmax = 5
@@ -129,8 +129,8 @@ for i_oxygens in range(n_oxygens):
     scaled_pca_descriptors[:,i_oxygens,:] = pca_oxygens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_oxygens,:])
     
 #scaling post pca
-scaler_O_2 = MinMaxScaler()
-scaler_H_2 = MinMaxScaler()
+scaler_O_2 = StandardScaler()
+scaler_H_2 = StandardScaler()
 
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
@@ -185,6 +185,7 @@ guess_positions_overtime[0] = all_positions[0,:,:]
 
 
 for i_time in range(1,mc_time):
+    print(i_time/mc_time*100,'%')
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
     accepted_try_energies = np.empty(mc_iterations)
     n_iterations = 0
