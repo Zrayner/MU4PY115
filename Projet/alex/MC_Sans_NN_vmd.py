@@ -225,8 +225,8 @@ for i_time in range(1,mc_time):
         for i_time_mc in range(mc_time):
               zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
         
-        write("trajectoire_MC_handpicked{}.xyz".format(i_time/mc_time*100)//10),zundel_MC,append=True)
-        write("trajectoire_DFT_handpicked{}.xyz".format(i_time/mc_time*100)//10),zundel_DFT,append=True)
+        write("trajectoire_MC_handpicked{}.xyz".format(i_time/mc_time*100)//10,zundel_MC,append=True)
+        write("trajectoire_DFT_handpicked{}.xyz".format(i_time/mc_time*100)//10,zundel_DFT,append=True)
     
  
 print("taux d'acceptation=",np.mean(acceptation))  
