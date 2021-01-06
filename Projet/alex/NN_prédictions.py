@@ -23,6 +23,7 @@ from dscribe.descriptors import SOAP
 from ase.build import molecule
 from ase import Atoms
 
+from keras.models import load_model
 
 #positions and corresponding energies of a zundel molecule importation
 datapath='../../../'
