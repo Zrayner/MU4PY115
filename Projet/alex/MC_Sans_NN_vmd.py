@@ -213,7 +213,7 @@ for i_time in range(1,mc_time):
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
     i_time = i_time + 1
-    if np.intc((i_time/mc_time*100)/10) in [1,2,3,4,5,6,7,8,9,10]:
+    if (np.intc(i_time/mc_time*100))/10) in [1,2,3,4,5,6,7,8,9,10]:
         #saving positions which will be read with VMD
         print('saving data',(i_time/mc_time*100)//10)
         zundel_MC = np.empty(mc_time,dtype=object )
