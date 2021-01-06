@@ -66,6 +66,15 @@ data_params={
     
     }
 
+fit_params={
+        'epochs': 10,
+        'batch_size':400,
+        'verbose':1,
+  
+ 
+       
+    
+    }
 
 
 #data_slicing
@@ -178,9 +187,6 @@ descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,
 train_limit=int(data_params['train_ratio']*n_configs)
 val_limit=int((data_params['train_ratio']+data_params['val_ratio'])*n_configs)
 
-print('nconfig',n_configs)
-print('train_limit',train_limit)
-print('val_limit',val_limit)
 
 #setting the train and test and validation set
 descriptors_train = descriptors_swap[:,:train_limit,:]
@@ -244,8 +250,6 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 400
-epochs= 5
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
@@ -258,9 +262,9 @@ early_stopping = keras.callbacks.EarlyStopping(monitor='loss',min_delta=0.0001,r
 
 #training the NN
 history = Zundel_NN.fit(descriptors_train_nn,energies_train,
-                                      batch_size=batchsize,
-                                      epochs=epochs,
-                                      verbose=1,
+                                      batch_size=fit_params['batch_size'],
+                                      epochs=fit_params['epochs'],
+                                      verbose=fit_params['verbose'],
                                       callbacks=[early_stopping,lr_reduce],
                                       validation_data=(descriptors_val_nn,energies_val))
 
