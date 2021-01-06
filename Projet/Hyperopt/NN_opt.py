@@ -78,7 +78,7 @@ best_params_yet={'nmax': 4,
     
     } """
 
-Space= {'Scaler_2': hp.choice('Scaler_2', [ MaxAbsScaler()]),
+Space= {'Scaler_2': hp.choice('Scaler_2', [ MaxAbsScaler(),MinMaxScaler(),StandardScaler()]),
 
                 
     
