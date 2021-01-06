@@ -62,7 +62,7 @@ n_atoms = n_hydrogens + n_oxygens
 
 
 #zundel molecule creation
-zundels = np.empty(n_configs,dtype=object )
+zundels = np.empty(n_configs,dtype=object)
 for i_configs in range(n_configs):
       zundels[i_configs] = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions[i_configs])
 
@@ -135,11 +135,12 @@ scaler_H_2 = StandardScaler()
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold] = scaler_H_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[n_features_oxygens:,:pca_treshold])
 scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold] = scaler_O_2.fit_transform(scaled_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:n_features_oxygens,:pca_treshold])
 
-
+#getting energy from NN giviing a position
 def get_energy(positions):
 
     zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions)
     descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)   
+    
     descriptors[n_oxygens:,:] = scaler_H_1.transform(descriptors[n_oxygens:,:])
     for i_hydrogens in range(n_hydrogens):
         descriptors[n_oxygens+i_hydrogens,:] = pca_hydrogens.transform(descriptors[n_oxygens+i_hydrogens,:].reshape(1,-1))
@@ -151,19 +152,19 @@ def get_energy(positions):
     descriptors[:n_oxygens,:pca_treshold] =scaler_O_2.transform(descriptors[:n_oxygens,:pca_treshold])
    
     desc = np.ones([1,pca_treshold])
-    descriptors_nn =[]
+    descriptors_nn = []
     for i_atom in range(n_atoms):
         desc[:,:] = descriptors[i_atom,:pca_treshold]
         descriptors_nn.append(np.int_(desc))
     
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))[0][0]
 
-
+#Temperature and Boltzman constant
 T = 100
 k = 1.380649e-23
 beta = 1/(T*k)
 
-
+#computing delta 
 dist = np.empty([n_configs-1,n_atoms,3])
 for i_configs in range(n_configs-1):
     for i_atom in range(n_atoms):
@@ -176,14 +177,14 @@ print("delta=",delta)
 mc_time = 1500
 mc_iterations = 30
 acceptation = []
-hartree = 1.602176*27.211297e-19
+hartree = 1.602176*27.211297e-19 #energy units of the data set: 1 hartree = 27,211396641308eV
 
 
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
 guess_positions_overtime[0] = all_positions[0,:,:]
 
-
+#Monte-Carlo simulation
 for i_time in range(1,mc_time):
     print(i_time/mc_time*100,'%')
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
@@ -196,7 +197,7 @@ for i_time in range(1,mc_time):
         try_energy = get_energy(try_position)
 
     
-        diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree  #1 hartree = 27,211396641308eV
+        diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
@@ -212,22 +213,25 @@ for i_time in range(1,mc_time):
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
     i_time = i_time + 1
-
+    if (i_time/mc_time*100)//10 in [1,2,3,4,5,6,7,8,9,10]:
+        #saving positions which will be read with VMD
+        print('saving data',(i_time/mc_time*100)//10)
+        zundel_MC = np.empty(mc_time,dtype=object )
+        zundel_DFT = np.empty(mc_time,dtype=object )
+         
+        for i_time_mc in range(mc_time):
+              zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
+        
+        for i_time_mc in range(mc_time):
+              zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
+        
+        write("trajectoire_MC_handpicked{}.xyz".format(i_time/mc_time*100)//10),zundel_MC,append=True)
+        write("trajectoire_DFT_handpicked{}.xyz".format(i_time/mc_time*100)//10),zundel_DFT,append=True)
     
  
 print("taux d'acceptation=",np.mean(acceptation))  
 
-zundel_MC = np.empty(mc_time,dtype=object )
-zundel_DFT = np.empty(mc_time,dtype=object )
- 
-for i_time_mc in range(mc_time):
-      zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
 
-for i_time_mc in range(mc_time):
-      zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
-
-write("trajectoire_MC_handpicked.xyz",zundel_MC,append=True)
-write("trajectoire_DFT_handpicked.xyz",zundel_DFT,append=True)
 
 
 
