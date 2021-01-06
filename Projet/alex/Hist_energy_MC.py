@@ -43,4 +43,6 @@ DFT_energy=all_energies[:100000]
 
 plt.hist(DFT_energy,label='DFT')
 plt.hist(Guess_energy,label='MC')
+plt.label()
+
 plt.savefig('hist_energy')
