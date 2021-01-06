@@ -251,7 +251,7 @@ subnets = []
 for i_oxygens in range(molecule_params['n_oxygens']):
     subnets.append(model0(inputs[i_oxygens]))
 for j_hydrogens in range(molecule_params['n_hydrogens'] ):
-    subnets.append(modelH(inputs[i_hydrogens+molecule_params['n_oxygens']]))
+    subnets.append(modelH(inputs[j_hydrogens+molecule_params['n_oxygens']]))
     
 
 added = keras.layers.Add()(subnets)
