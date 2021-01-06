@@ -177,6 +177,7 @@ mc_iterations = 20
 acceptation = []
 hartree = 1.602176*27.211297e-19
 
+delta=0.385
 
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
