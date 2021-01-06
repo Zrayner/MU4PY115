@@ -174,7 +174,7 @@ delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0)
 print("delta=",delta)
 
 
-mc_time = 100
+mc_time = 10000
 mc_iterations = 30
 acceptation = []
 hartree = 1.602176*27.211297e-19 #energy units of the data set: 1 hartree = 27,211396641308eV
