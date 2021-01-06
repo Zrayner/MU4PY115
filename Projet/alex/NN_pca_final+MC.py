@@ -28,11 +28,10 @@ datapath='../../../'
 all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
 all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
 
-positions = all_positions[::5]
-energies = all_energies[::5]
+
 
 #parameters settings
-species = ["H","O"]
+
 
 dscribe_params={
         'nmax': 4,
@@ -41,7 +40,7 @@ dscribe_params={
         'sigma_SOAP': 1.0,
         'periodic': False,
         'species': ["H","O"],
-        'sparse'=False,
+        'sparse':False,
  
        
     
@@ -57,11 +56,32 @@ model_params={
     }
 
 
+data_params={
+        'slicing': 10,
+        'train_ratio':0.85,
+        'val_ratio':0.10,
+  
+ 
+       
+    
+    }
 
 
 
-#soap settings
-soap = SOAP(dscribe_params
+#data_slicing
+positions = all_positions[::data_params['slicing']]
+energies = all_energies[::data_params['slicing']]
+
+
+#soap descriptors
+soap = SOAP(nmax=dscribe_params['nmax'],
+            lmax=dscribe_params['lmax'],
+            rcut=dscribe_params['rcut'],
+            sigma=dscribe_params['sigma_SOAP'],
+            periodic=dscribe_params['periodic'],
+            species=dscribe_params['species'],
+            sparse=dscribe_params['sparse'],
+            
 )
 
 n_configs = np.shape(positions)[0]
@@ -155,14 +175,18 @@ scaled_pca_descriptors.reshape(n_features_hydrogens+n_features_oxygens,n_dims)[:
 #swaping axes for NN purpose
 descriptors_swap = np.swapaxes(scaled_pca_descriptors.reshape(n_configs,n_atoms,n_dims)[:,:,:pca_treshold],0,1)
 
-
+train_limit=int(data_params['train_ratio']*n_configs)
+val_limit=int(data_params['val_ratio']*n_configs)
+print('nconfig',n_configs)
+print('train_limit',train_limit)
+print('val_limit',val_limit)
 #setting the train and test and validation set
-descriptors_train = descriptors_swap[:,:85000*2,:]
-descriptors_val = descriptors_swap[:,85000*2:95000*2,:]
-descriptors_test = descriptors_swap[:,95000*2:,:]
-energies_train = scaled_energies[:85000*2]
-energies_val = scaled_energies[85000*2:95000*2]
-energies_test = scaled_energies[95000*2:]
+descriptors_train = descriptors_swap[:,:train_limit,:]
+descriptors_val = descriptors_swap[:,train_limit:val_limit,:]
+descriptors_test = descriptors_swap[:,val_limit:,:]
+energies_train = scaled_energies[:train_limit]
+energies_val = scaled_energies[train_limit:val_limit]
+energies_test = scaled_energies[val_limit:]
 
 
 #creating a list of array to fit in the NN
@@ -218,8 +242,8 @@ def compile_model(model):
 
 Zundel_NN = compile_model(zundel_model)
 
-batchsize = 200
-epochs= 10
+batchsize = 400
+epochs= 5
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(

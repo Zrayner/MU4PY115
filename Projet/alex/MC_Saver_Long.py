@@ -181,7 +181,7 @@ print("delta=",delta)
 
 
 mc_time = 10000
-mc_iterations = 30
+
 acceptation = []
 hartree = 1.602176*27.211297e-19
 
@@ -211,34 +211,33 @@ def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
 
 
 
-for i_time in range(1,mc_time):
+while i_time<mc_time:
     print(i_time/mc_time*100,'%')
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
     accepted_try_energies = np.empty(mc_iterations)
-    n_iterations = 0
-    
-    while n_iterations < mc_iterations:
-        increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
-        try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire 
-        try_energy = get_energy(try_position)
 
     
-        diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree  #1 hartree = 27,211396641308eV
-        if diff_E < 0 : 
-            accepted_try_energies[n_iterations] = try_energy
-            accepted_try_positions[n_iterations,:,:] = try_position
-            n_iterations = n_iterations + 1
-            acceptation.append(1)
-        elif np.exp(-beta * diff_E) >= np.random.random():
-            accepted_try_energies[n_iterations] = try_energy
-            accepted_try_positions[n_iterations,:,:] = try_position
-            n_iterations = n_iterations + 1
-            acceptation.append(1)
-        else:
-            acceptation.append(0)
-    guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
-    guess_energy_overtime[i_time] = min(accepted_try_energies)
-    i_time = i_time + 1
+
+    increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
+    try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire 
+    try_energy = get_energy(try_position)
+
+
+    diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree  #1 hartree = 27,211396641308eV
+    if diff_E < 0 : 
+        guess_positions_overtime[i_time] = try_position
+        guess_energy_overtime[i_time]=try_energy
+        i_time = i_time + 1
+        acceptation.append(1)
+    elif np.exp(-beta * diff_E) >= np.random.random():
+        guess_positions_overtime[i_time] = try_position
+        guess_energy_overtime[i_time]=try_energy
+        i_time = i_time + 1
+        acceptation.append(1)
+    else:
+        acceptation.append(0)
+    
+
     if i_time/mc_time>save_ratio:
         save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime)
         save_ratio=save_ratio+0.01
