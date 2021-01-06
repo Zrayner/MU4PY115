@@ -199,11 +199,10 @@ for delta in [0.0001,0.001,0.01]:
     
     list_acceptation=[]
     for i in range(20):
-        print('i',n_iterations)
+        print('i',i)
         acceptation = []
         n_iterations = 0
         while n_iterations < mc_iterations:
-            print('while',n_iterations)
             increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
             try_position = guess_positions_overtime[0,:,:] + increment_aleatoire 
             try_energy = get_energy(try_position)
