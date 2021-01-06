@@ -67,7 +67,7 @@ model_params={
 
 
 data_params={
-        'slicing': 30,
+        'slicing': 5,
         'train_ratio':0.85,
         'val_ratio':0.1,
   
@@ -88,8 +88,8 @@ PCA_params={
 
 
 fit_params={
-        'epochs': 10,
-        'batch_size':400,
+        'epochs': 500,
+        'batch_size':30,
         'verbose':1,
   
  
@@ -290,7 +290,7 @@ history = Zundel_NN.fit(descriptors_train_nn,energies_train,
 
 
 
-"""Zundel_NN.save('Fitted_Zundel_NN.h5')
+Zundel_NN.save('Fitted_Zundel_NN.h5')
 
 #descaling energies and outputs
 predicted_energies = Zundel_NN.predict(descriptors_test_nn)
@@ -313,7 +313,7 @@ plt.plot(energy,energy,markersize=2,color='red')
 plt.xlabel('True Energies (en Hartree)')
 plt.ylabel('Predicted Energies (en Hartree)')
 plt.legend(['Predicted Energy'], loc='best')
-plt.savefig('comparaison.jpg')"""
+plt.savefig('comparaison.jpg')
 
 
 
