@@ -35,7 +35,6 @@ tf.keras.utils.plot_model(
     Zundel_NN,
     to_file="Zundel_model.png",
     show_shapes=False,
-    show_dtype=False,
     show_layer_names=True,
     rankdir="TB",
     expand_nested=False,
