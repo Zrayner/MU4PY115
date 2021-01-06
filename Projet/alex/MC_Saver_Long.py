@@ -193,6 +193,24 @@ guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
 guess_positions_overtime[0] = all_positions[0,:,:]
 
+def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
+    print('saving')
+    print("taux d'acceptation=",np.mean(acceptation))  
+    zundel_MC = np.empty(mc_time,dtype=object )
+    zundel_DFT = np.empty(mc_time,dtype=object )
+     
+    for i_time_mc in range(i_time):
+          zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
+    
+    for i_time_mc in range(i_time):
+          zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
+    
+    write("trajectoire_MC_handpicked_Ew.xyz",zundel_MC,append=True)
+    write("trajectoire_DFT_handpicked_Ew.xyz",zundel_DFT,append=True)
+    write("energy_overtime.xyz",guess_energy_overtime,append=True)
+
+
+
 for i_time in range(1,mc_time):
     print(i_time/mc_time*100,'%')
     accepted_try_positions = np.empty([mc_iterations,n_atoms,3])
@@ -229,19 +247,4 @@ for i_time in range(1,mc_time):
  
 
 
-def save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime):
-    print('saving')
-    print("taux d'acceptation=",np.mean(acceptation))  
-    zundel_MC = np.empty(mc_time,dtype=object )
-    zundel_DFT = np.empty(mc_time,dtype=object )
-     
-    for i_time_mc in range(i_time):
-          zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
-    
-    for i_time_mc in range(i_time):
-          zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
-    
-    write("trajectoire_MC_handpicked_Ew.xyz",zundel_MC,append=True)
-    write("trajectoire_DFT_handpicked_Ew.xyz",zundel_DFT,append=True)
-    write("energy_overtime.xyz",guess_energy_overtime,append=True)
 
