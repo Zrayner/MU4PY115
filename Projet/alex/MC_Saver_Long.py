@@ -185,7 +185,7 @@ mc_iterations = 30
 acceptation = []
 hartree = 1.602176*27.211297e-19
 
-delta=0.02
+delta=0.01
 save_ratio=0.1
 
 
