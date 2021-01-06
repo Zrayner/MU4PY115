@@ -203,11 +203,11 @@ for delta in [0.0001,0.001,0.01]:
         while n_iterations < mc_iterations:
             print(n_iterations)
             increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
-            try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire 
+            try_position = guess_positions_overtime[0,:,:] + increment_aleatoire 
             try_energy = get_energy(try_position)
     
         
-            diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree  #1 hartree = 27,211396641308eV
+            diff_E = (try_energy - guess_energy_overtime[0]) * hartree  #1 hartree = 27,211396641308eV
             if diff_E < 0 : 
                 accepted_try_energies[n_iterations] = try_energy
                 accepted_try_positions[n_iterations,:,:] = try_position
