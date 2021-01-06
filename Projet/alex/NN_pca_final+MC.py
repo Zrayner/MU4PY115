@@ -185,7 +185,7 @@ print("dimension desc post pca=", pca_treshold, "\n"
       "dimennsion desc pre pca=",n_dims)
 
 scaled_pca_descriptors = np.empty([n_configs,n_atoms,n_dims])
-for i_hydrogens in range(n_hydrogens):
+for i_hydrogens in range(molecule_params['n_hydrogens'] ):
     scaled_pca_descriptors[:,i_hydrogens+n_oxygens,:] = pca_hydrogens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_hydrogens+n_oxygens,:])
 for i_oxygens in range(n_oxygens):
     scaled_pca_descriptors[:,i_oxygens,:] = pca_oxygens.transform(scaled_descriptors.reshape(n_configs,n_atoms,n_dims)[:,i_oxygens,:])
@@ -250,7 +250,7 @@ for i_atoms in range(n_atoms):
 subnets = []
 for i_oxygens in range(n_oxygens):
     subnets.append(model0(inputs[i_oxygens]))
-for j_hydrogens in range(n_hydrogens):
+for j_hydrogens in range(molecule_params['n_hydrogens'] ):
     subnets.append(modelH(inputs[i_hydrogens+n_oxygens]))
     
 
@@ -268,7 +268,7 @@ def compile_model(model):
 
 
 Zundel_NN = compile_model(zundel_model)
-
+Zundel_NN.summary()
 
 #callbacks
 lr_reduce = keras.callbacks.ReduceLROnPlateau(
