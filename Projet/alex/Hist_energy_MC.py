@@ -39,3 +39,8 @@ all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'
 
 Guess_energy=np.load('guess_energy_overtime.npy')
 print(np.shape(Guess_energy))
+DFT_energy=all_energies[:100000]
+
+plt.hist(DFT_energy,label='DFT')
+plt.hist(Guess_energy,label='MC')
+plt.savefig('hist_energy')
