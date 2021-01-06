@@ -201,18 +201,18 @@ for i_time in range(1,mc_time):
         if diff_E < 0 : 
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
-            n_iterations = n_iterations + 1
+            n_iterations = n_iterations+1
             acceptation.append(1)
         elif np.exp(-beta * diff_E) >= np.random.random():
             accepted_try_energies[n_iterations] = try_energy
             accepted_try_positions[n_iterations,:,:] = try_position
-            n_iterations = n_iterations + 1
+            n_iterations = n_iterations+1
             acceptation.append(1)
         else:
             acceptation.append(0)
     guess_positions_overtime[i_time] = accepted_try_positions[np.argmin(accepted_try_energies)]
     guess_energy_overtime[i_time] = min(accepted_try_energies)
-    i_time = i_time + 1
+    i_time = i_time+1
     if (i_time/mc_time*100)/10 in [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0]:
         #saving positions which will be read with VMD
         print('saving data',(i_time/mc_time*100)//10)
@@ -229,7 +229,7 @@ for i_time in range(1,mc_time):
         write("trajectoire_DFT_handpicked{}.xyz".format((i_time/mc_time*100)//10),zundel_DFT,append=True)
     
  
-print("taux d'acceptation=",np.mean(acceptation))  
+print("taux d'acceptation=",np.mean(acceptation))
 
 
 
