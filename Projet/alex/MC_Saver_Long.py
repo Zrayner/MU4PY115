@@ -186,7 +186,7 @@ acceptation = []
 hartree = 1.602176*27.211297e-19
 
 delta=0.01
-save_ratio=0.01
+save_ratio=0.1
 
 
 
@@ -244,12 +244,9 @@ while i_time<mc_time:
         guess_energy_overtime[i_time]=guess_energy_overtime[i_time-1]
         i_time+=1
 
-    if i_time/mc_time>save_ratio:
-        save(i_time,acceptation,guess_positions_overtime,guess_energy_overtime)
-        save_ratio=save_ratio+0.01
-        
+
     
- 
+save(mc_time,acceptation,guess_positions_overtime,guess_energy_overtime)
 
 
 
