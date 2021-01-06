@@ -217,7 +217,7 @@ guess_positions_overtime[0] = all_positions[0,:,:]
 
 i_time=1
 while i_time<mc_time:
-    if i_time/mc_time in np.linspace(1,100,100)
+    if i_time/mc_time in np.linspace(1,100,100):
         print(i_time/mc_time*100,'%')
 
     
