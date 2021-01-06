@@ -228,15 +228,15 @@ def get_energy(positions):
 
     zundel = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions)
     descriptors = soap.create(zundel,positions=np.arange(n_atoms),n_jobs=4)   
-    descriptors[n_oxygens:,:] = scaler_H_1.transform(descriptors[n_oxygens:,:])
-    for i_hydrogens in range(n_hydrogens):
-        descriptors[n_oxygens+i_hydrogens,:] = pca_hydrogens.transform(descriptors[n_oxygens+i_hydrogens,:].reshape(1,-1))
-    descriptors[n_oxygens:,:pca_treshold] = scaler_H_2.transform(descriptors[n_oxygens:,:pca_treshold])
+    descriptors[molecule_params['n_oxygens']:,:] = scaler_H_1.transform(descriptors[molecule_params['n_oxygens']:,:])
+    for i_hydrogens in range(molecule_params['n_hydrogens']):
+        descriptors[molecule_params['n_oxygens']+i_hydrogens,:] = pca_hydrogens.transform(descriptors[molecule_params['n_oxygens']+i_hydrogens,:].reshape(1,-1))
+    descriptors[molecule_params['n_oxygens']:,:pca_treshold] = scaler_H_2.transform(descriptors[molecule_params['n_oxygens']:,:pca_treshold])
     
-    descriptors[:n_oxygens,:] = scaler_O_1.transform(descriptors[:n_oxygens,:])
-    for i_oxygens in range(n_oxygens):
+    descriptors[:molecule_params['n_oxygens'],:] = scaler_O_1.transform(descriptors[:molecule_params['n_oxygens'],:])
+    for i_oxygens in range(molecule_params['n_oxygens']):
         descriptors[i_oxygens,:] = pca_oxygens.transform(descriptors[i_oxygens,:].reshape(1,-1))
-    descriptors[:n_oxygens,:pca_treshold] =scaler_O_2.transform(descriptors[:n_oxygens,:pca_treshold])
+    descriptors[:molecule_params['n_oxygens'],:pca_treshold] =scaler_O_2.transform(descriptors[:molecule_params['n_oxygens'],:pca_treshold])
    
     desc = np.ones([1,pca_treshold])
     descriptors_nn =[]
