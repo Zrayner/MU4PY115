@@ -173,7 +173,7 @@ delta = (max(np.max(np.max(dist,axis=0),axis=1))- min(np.min(np.min(dist,axis=0)
 print("delta=",delta)
 
 
-mc_time = 800
+mc_time = 1500
 mc_iterations = 30
 acceptation = []
 hartree = 1.602176*27.211297e-19
