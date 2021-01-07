@@ -225,10 +225,6 @@ for i_atom in range(n_atoms):
     descriptors_val_nn.append(descriptors_val[i_atom,:,:])
 
 #energy function: getting energy with the NN predictions over positions
-def convert_to_inputs(desc):
-    desc_t = desc.transpose(1, 0, 2)
-    return [desc_t[i] for i in range(np.shape(desc_t)[0])]
-
 
 def get_energy(positions):
 
@@ -244,8 +240,13 @@ def get_energy(positions):
         descriptors[i_oxygens,:] = pca_oxygens.transform(descriptors[i_oxygens,:].reshape(1,-1))
     descriptors[:molecule_params['n_oxygens'],:pca_treshold] =scaler_O_2.transform(descriptors[:molecule_params['n_oxygens'],:pca_treshold])
    
+    desc = np.ones([1,pca_treshold])
+    descriptors_nn =[]
+    for i_atom in range(n_atoms):
+        desc[:,:] = descriptors[i_atom,:pca_treshold]
+        descriptors_nn.append(desc)
     
-    return energies_scaler.inverse_transform(Zundel_NN.predict(convert_to_inputs(descriptors)))[0][0]
+    return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))[0][0]
 
 #Temperature and Boltzmann constant
 T = 100
@@ -297,6 +298,7 @@ while i_time<mc_time:
     increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
     try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire 
     try_energy = get_energy(try_position)
+    print(try_energy)
 
 
     diff_E = try_energy-guess_energy_overtime[i_time-1]  #1 hartree = 27,211396641308eV
@@ -318,7 +320,7 @@ while i_time<mc_time:
         
 
 #save the data
-save(mc_time-1,acceptation,guess_positions_overtime)
+'''save(mc_time-1,acceptation,guess_positions_overtime)'''
 
 
 
