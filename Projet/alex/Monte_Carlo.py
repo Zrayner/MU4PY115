@@ -258,7 +258,7 @@ mc_time = 100000 #iterations for MC
 acceptation = [] 
 hartree = 1.602176*27.211297e-19 #covert hartree to Joules
 
-delta=0.02 #lenght of the box where atoms are moving
+delta=0.008 #lenght of the box where atoms are moving
 
 #save MC positions over time
 def save(i_time,acceptation,guess_positions_overtime):
@@ -275,6 +275,7 @@ def save(i_time,acceptation,guess_positions_overtime):
     
     write("trajectoire_MC_handpicked_Ew.xyz",zundel_MC,append=True)
     write("trajectoire_DFT_handpicked_Ew.xyz",zundel_DFT,append=True)
+    np.save("guess_energy_overtime",guess_energy_overtime)
 
 
 
@@ -282,7 +283,7 @@ def save(i_time,acceptation,guess_positions_overtime):
 #creating MC positions and energies array
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
-guess_positions_overtime[0] = all_positions[1000,:,:]
+guess_positions_overtime[0,:,:] = all_positions[1000,:,:]
 
 
 i_time=1 #initializing MC iteration
@@ -297,13 +298,13 @@ while i_time<mc_time:
     try_energy = get_energy(try_position)
 
 
-    diff_E = (try_energy - guess_energy_overtime[i_time-1]) * hartree  #1 hartree = 27,211396641308eV
+    diff_E = try_energy - guess_energy_overtime[i_time-1]  #1 hartree = 27,211396641308eV
     if diff_E < 0 : 
         guess_positions_overtime[i_time] = try_position
         guess_energy_overtime[i_time] = try_energy
         i_time = i_time + 1
         acceptation.append(1)
-    elif np.exp(-beta * diff_E) >= np.random.random():
+    elif np.exp(-beta * diff_E * hartree) >= np.random.random():
         guess_positions_overtime[i_time] = try_position
         guess_energy_overtime[i_time] = try_energy
         i_time = i_time + 1
