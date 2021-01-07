@@ -253,12 +253,12 @@ k = 1.380649e-23
 beta = 1/(T*k)
 
 
-mc_time = 100000 #iterations for MC
+mc_time = 100 #iterations for MC
 
 acceptation = [] 
 hartree = 1.602176*27.211297e-19 #covert hartree to Joules
 
-delta= 0.002 #lenght of the box where atoms are moving
+delta= 0.003 #lenght of the box where atoms are moving
 
 #save MC positions over time
 def save(i_time,acceptation,guess_positions_overtime):
@@ -297,6 +297,7 @@ while i_time<mc_time:
     increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
     try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire 
     try_energy = get_energy(try_position)
+    print(try_energy)
 
 
     diff_E = try_energy - guess_energy_overtime[i_time-1]  #1 hartree = 27,211396641308eV
