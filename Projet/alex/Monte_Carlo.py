@@ -23,6 +23,7 @@ from sklearn.preprocessing import StandardScaler, MaxAbsScaler, MinMaxScaler
 from dscribe.descriptors import SOAP
 from ase.build import molecule
 from ase import Atoms
+form ase.io import write
 
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
