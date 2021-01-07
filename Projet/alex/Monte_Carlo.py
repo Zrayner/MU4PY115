@@ -319,7 +319,7 @@ while i_time<mc_time:
         
 
 #save the data
-save(mc_time-1,acceptation,guess_positions_overtime)
+'''save(mc_time-1,acceptation,guess_positions_overtime)'''
 
 
 
