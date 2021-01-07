@@ -258,7 +258,7 @@ mc_time = 100000 #iterations for MC
 acceptation = [] 
 hartree = 1.602176*27.211297e-19 #covert hartree to Joules
 
-delta= all_positions[1,0,0]-all_positions[0,0,0] #lenght of the box where atoms are moving
+delta= 0.02 #lenght of the box where atoms are moving
 
 #save MC positions over time
 def save(i_time,acceptation,guess_positions_overtime):
