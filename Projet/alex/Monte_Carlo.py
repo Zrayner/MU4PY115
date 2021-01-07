@@ -253,7 +253,7 @@ k = 1.380649e-23
 beta = 1/(T*k)
 
 
-mc_time = 100 #iterations for MC
+mc_time = 10000 #iterations for MC
 
 acceptation = [] 
 hartree = 1.602176*27.211297e-19 #covert hartree to Joules
@@ -300,7 +300,7 @@ while i_time<mc_time:
     print(try_energy)
 
 
-    diff_E = try_energy - guess_energy_overtime[i_time-1]  #1 hartree = 27,211396641308eV
+    diff_E = try_energy-guess_energy_overtime[i_time-1]  #1 hartree = 27,211396641308eV
     if diff_E < 0 : 
         guess_positions_overtime[i_time] = try_position
         guess_energy_overtime[i_time] = try_energy
