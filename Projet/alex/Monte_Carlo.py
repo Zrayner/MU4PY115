@@ -258,7 +258,7 @@ mc_time = 100000 #iterations for MC
 acceptation = [] 
 hartree = 1.602176*27.211297e-19 #covert hartree to Joules
 
-delta=0.008 #lenght of the box where atoms are moving
+delta= all_positions[1,0,0]-all_positions[0,0,0] #lenght of the box where atoms are moving
 
 #save MC positions over time
 def save(i_time,acceptation,guess_positions_overtime):
@@ -290,8 +290,9 @@ i_time=1 #initializing MC iteration
 
 #MC simulation
 while i_time<mc_time:
-
-    print(i_time/mc_time*100,'%')
+    if i_time/mc_time*100 in np.linspace(1,100,100):
+        print(i_time/mc_time*100,'%')
+        print(np.mean(acceptation))
 
     increment_aleatoire = np.random.random((n_atoms,3))*2*delta - delta 
     try_position = guess_positions_overtime[i_time-1,:,:] + increment_aleatoire 
@@ -314,7 +315,7 @@ while i_time<mc_time:
         guess_positions_overtime[i_time] = guess_positions_overtime[i_time-1] 
         guess_energy_overtime[i_time] = guess_energy_overtime[i_time-1]
         i_time+=1
-
+        
 
 #save the data
 save(mc_time-1,acceptation,guess_positions_overtime)
