@@ -27,11 +27,9 @@ from ase.io import write
 
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
-all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
-all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
-
+positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))[::10]
+energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1::10]
 Zundel_NN=load_model('Fitted_Zundel_NN.h5')
-
 #parameters settings
 
 molecule_params={
@@ -69,7 +67,7 @@ model_params={
 
 
 data_params={
-        'slicing': 5,
+        'slicing': 10,
         'train_ratio':0.85,
         'val_ratio':0.1,
   
@@ -101,8 +99,8 @@ fit_params={
 
 
 #data_slicing
-positions = all_positions[::data_params['slicing']]
-energies = all_energies[::data_params['slicing']]
+# positions = all_positions[::data_params['slicing']]
+# energies = all_energies[::data_params['slicing']]
 
 
 #soap descriptors
@@ -241,9 +239,11 @@ def get_energy(positions):
     descriptors[:molecule_params['n_oxygens'],:pca_treshold] =scaler_O_2.transform(descriptors[:molecule_params['n_oxygens'],:pca_treshold])
    
     desc = np.ones([1,pca_treshold])
+    for i in range(pca_treshold):
+        desc[:,i] = 1
     descriptors_nn =[]
     for i_atom in range(n_atoms):
-        desc[:,:] = descriptors[i_atom,:pca_treshold]
+        desc[0,:] = descriptors[i_atom,:pca_treshold]
         descriptors_nn.append(desc)
     
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))[0][0]
@@ -254,12 +254,12 @@ k = 1.380649e-23
 beta = 1/(T*k)
 
 
-mc_time = 100000 #iterations for MC
+mc_time = 10000 #iterations for MC
 
 acceptation = [] 
 hartree = 1.602176*27.211297e-19 #covert hartree to Joules
 
-delta= 0.02 #lenght of the box where atoms are moving
+delta= 0.09 #lenght of the box where atoms are moving
 
 #save MC positions over time
 def save(i_time,acceptation,guess_positions_overtime):
@@ -272,19 +272,27 @@ def save(i_time,acceptation,guess_positions_overtime):
           zundel_MC[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=guess_positions_overtime[i_time_mc,:,:])
     
     for i_time_mc in range(i_time):
-          zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=all_positions[i_time_mc,:,:])
+          zundel_DFT[i_time_mc] = Atoms(numbers=[8,8,1,1,1,1,1], positions=positions[i_time_mc,:,:])
     
-    write("trajectoire_MC_handpicked_Ew.xyz",zundel_MC,append=True)
-    write("trajectoire_DFT_handpicked_Ew.xyz",zundel_DFT,append=True)
-    np.save("guess_energy_overtime",guess_energy_overtime)
+    write("trajectoire_MC_handpicked_A.xyz",zundel_MC,append=True)
+    write("trajectoire_DFT_handpicked_A.xyz",zundel_DFT,append=True)
+    np.save("guess_energy_overtime_A",guess_energy_overtime)
 
-
-
-
+predicted_energies=np.empty(np.intc(np.shape(positions[:val_limit:val_limit+1000])[0]))
+for i_time in range(np.intc(np.shape(positions[:val_limit:val_limit+1000])[0])):
+    predicted_energies[i_time]=get_energy(positions[val_limit+i_time])
+    if (i_time/np.intc(np.shape(positions[:val_limit:val_limit+1000])[0]))*100 in np.linspace(1,100,100):
+        print(predicted_energies[i_time])
+        print(i_time/np.intc(np.shape(positions[:val_limit:val_limit+1000])[0])*100,'%')
+plt.plot(energies[:val_limit:val_limit+1000],predicted_energies,'.')
+plt.savefig('energies.jpg')
+'''
 #creating MC positions and energies array
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
-guess_positions_overtime[0,:,:] = all_positions[0,:,:]
+guess_positions_overtime[0,:,:] = positions[1000+val_limit,:,:]
+guess_energy_overtime[0] = energies[1000+val_limit]
+
 
 
 i_time=1 #initializing MC iteration
@@ -320,7 +328,8 @@ while i_time<mc_time:
         
 
 #save the data
-'''save(mc_time-1,acceptation,guess_positions_overtime)'''
+save(mc_time-1,acceptation,guess_positions_overtime)
 
+'''
 
 
