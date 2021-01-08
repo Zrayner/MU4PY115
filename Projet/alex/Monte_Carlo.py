@@ -279,11 +279,11 @@ def save(i_time,acceptation,guess_positions_overtime):
     np.save("guess_energy_overtime_A",guess_energy_overtime)
 
 predicted_energies=np.empty(np.intc(np.shape(positions[:val_limit:(val_limit+1000),:,:])[0]))
-for i_time in range(np.intc(np.shape(positions[:val_limit:(val_limit+1000)])[0])):
+for i_time in rangenp.shape(positions[:val_limit:(val_limit+1000)])[0]:
     predicted_energies[i_time]=get_energy(positions[val_limit+i_time,:,:])
-    if (i_time/np.intc(np.shape(positions[:val_limit:(val_limit+1000),:,:])[0]))*100 in np.linspace(1,100,100):
+    if i_time/np.shape(positions[:val_limit:(val_limit+1000),:,:])[0]*100 in np.linspace(1,100,100):
         print(predicted_energies[i_time])
-        print(i_time/np.intc(np.shape(positions[:val_limit:(val_limit+1000)])[0])*100,'%')
+        print(i_time/np.shape(positions[:val_limit:(val_limit+1000)])[0]*100,'%')
 plt.plot(energies[:val_limit:(val_limit+1000)],predicted_energies,'.')
 plt.savefig('energies.jpg')
 '''
