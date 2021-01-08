@@ -27,8 +27,8 @@ from ase.io import write
 
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
-positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))[::10]
-energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1::10]
+all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))[::10]
+all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1::10]
 Zundel_NN=load_model('Fitted_Zundel_NN.h5')
 #parameters settings
 
@@ -99,8 +99,8 @@ fit_params={
 
 
 #data_slicing
-# positions = all_positions[::data_params['slicing']]
-# energies = all_energies[::data_params['slicing']]
+positions = all_positions[::data_params['slicing']]
+energies = all_energies[::data_params['slicing']]
 
 
 #soap descriptors
@@ -240,7 +240,7 @@ def get_energy(positions):
    
     desc = np.ones([1,pca_treshold])
     for i in range(pca_treshold):
-        desc[:,i] = 1
+        desc[:,i] = 0
     descriptors_nn =[]
     for i_atom in range(n_atoms):
         desc[0,:] = descriptors[i_atom,:pca_treshold]
@@ -278,16 +278,8 @@ def save(i_time,acceptation,guess_positions_overtime):
     write("trajectoire_DFT_handpicked_A.xyz",zundel_DFT,append=True)
     np.save("guess_energy_overtime_A",guess_energy_overtime)
 
-predicted_energies=np.empty(np.intc(np.shape(positions[:val_limit:,:,:])[0]))
-for i_time in range(np.shape(positions[:val_limit:])[0]):
-    predicted_energies[i_time]=get_energy(positions[val_limit+i_time,:,:])
-    print(predicted_energies[i_time])
-    if i_time/np.shape(positions[:val_limit:,:,:])[0]*100 in np.linspace(1,100,100):
-        print(predicted_energies[i_time])
-        print(i_time/np.shape(positions[:val_limit:])[0]*100,'%')
-plt.plot(energies[:val_limit:],predicted_energies,'.')
-plt.savefig('energies.jpg')
-'''
+
+
 #creating MC positions and energies array
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
@@ -331,6 +323,6 @@ while i_time<mc_time:
 #save the data
 save(mc_time-1,acceptation,guess_positions_overtime)
 
-'''
+
 
 
