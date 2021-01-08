@@ -283,8 +283,8 @@ def save(i_time,acceptation,guess_positions_overtime):
 #creating MC positions and energies array
 guess_energy_overtime = np.empty(mc_time)
 guess_positions_overtime = np.empty([mc_time,n_atoms,3])
-guess_positions_overtime[0,:,:] = positions[1000+val_limit,:,:]
-guess_energy_overtime[0] = energies[1000+val_limit]
+guess_positions_overtime[0,:,:] = positions[val_limit+1,:,:]
+guess_energy_overtime[0] = energies[val_limit+1]
 
 
 
