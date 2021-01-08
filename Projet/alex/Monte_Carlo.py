@@ -27,8 +27,8 @@ from ase.io import write
 
 datapath='../../../'
 #positions and corresponding energies of a zundel molecule importation
-all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))[::10]
-all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1::10]
+all_positions = pickle.load(open(os.path.join(datapath,'zundel_100K_pos'),'rb'))
+all_energies = pickle.load(open(os.path.join(datapath,'zundel_100K_energy'),'rb'))[1:]
 Zundel_NN=load_model('Fitted_Zundel_NN.h5')
 #parameters settings
 
@@ -67,7 +67,7 @@ model_params={
 
 
 data_params={
-        'slicing': 10,
+        'slicing': 100,
         'train_ratio':0.85,
         'val_ratio':0.1,
   
@@ -243,7 +243,7 @@ def get_energy(positions):
         desc[:,i] = 0
     descriptors_nn =[]
     for i_atom in range(n_atoms):
-        desc[0,:] = descriptors[i_atom,:pca_treshold]
+        desc[:,:] = descriptors[i_atom,:pca_treshold]
         descriptors_nn.append(desc)
     
     return energies_scaler.inverse_transform(Zundel_NN.predict(descriptors_nn))[0][0]
